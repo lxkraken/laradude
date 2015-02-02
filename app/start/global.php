@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,12 @@ Log::useFiles(storage_path().'/logs/laravel.log');
 App::error(function(Exception $exception, $code)
 {
 	Log::error($exception);
+});
+
+App::error(function(ModelNotFoundException $e)
+{
+
+    return View::make('layouts.main')->nest('content', 'errors.modelNotFound');
 });
 
 /*

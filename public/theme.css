@@ -16,3 +16,7 @@ body {
 .theme-showcase .navbar .container {
   width: auto;
 }
+
+.productline_box {
+	padding:2px;
+}
