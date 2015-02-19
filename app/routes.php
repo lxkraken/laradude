@@ -11,35 +11,11 @@
 |
 */
 
-/*Route::get('/', function()
-{
-	return View::make('home');
-});*/
-
 Route::get('/', function()
 {
 	return View::make('layouts.main')->nest('content', 'home');
 });
 
-Route::get('/fcat', function()
-{
-	return View::make('layouts.main')->nest('content', 'catalogue.fcat');
-});
-
-Route::get('/ecat', function()
-{
-	return View::make('layouts.main')->nest('content', 'catalogue.ecat');
-});
-
-Route::get('/productlines', function()
-{
-	return View::make('layouts.main')->nest('content', 'catalogue.productlines');
-});
-
-/*Route::get('/product', function()
-{
-	return View::make('layouts.main')->nest('content', 'catalogue.product');
-});*/
 
 Route::get('assets', function()
 {
@@ -57,37 +33,68 @@ Route::get('users', function()
 
 Route::get('catalogue/{lang?}', 'CatalogueController@getIndex');
 
+Route::get('test', function(){
+	
+	$data['productline']['header_product'] = 'UBIZC01~UBIZC04';
+	
+	$pl['header_product'] = 'UBIZC01~UBIZC04';
 
-/*Route::get('/catalogue', function()
-{
-	$lang = 'f';
-	//$data = DB::select('select distinct cat_id from product_lines pl join products p using (pl_id) where p.prod_lang = ? or p.prod_lang = \'m\'', array($lang));
-	
-	$data = DB::table('product_lines')
-				->join('products', function($join)
-				{
-					$join->on('product_lines.pl_id', '=', 'products.pl_id')
-						  ->where('products.prod_lang', '=', 'f')
-						  ->orWhere('products.prod_lang', '=', 'm');
-				})
-				->select('product_lines.cat_id')
-				->distinct()
-				->get();
+		$baseProducts = Product::productline(255)->subproductline(0)->prodlang('f')->orderBy('prod_type')->orderBy('code')->display()->get();
 				
-	
-	
-	foreach($data as $d) $catId[] = $d->cat_id;
-	
-	//return View::make('layouts.main')->nest('content', 'catalogue.fcat', $categories);
-	
-	return var_dump($catId);
-});*/
+		$baseProductsArray = $baseProducts->toArray();
+		
+		if($data['productline']['header_product'] == 0)
+		{
+			$data['products'] = $baseProductsArray;
+			$data['header_product'] = 'none';
+		}
+		if($data['productline']['header_product'] == 1)
+		{
+			$data['header_product'] = array_shift($baseProductsArray);
+			$data['products'] = $baseProductsArray;
+			
+
+		}
+		else
+		{
+			
+			unset($data['header_product']);
+			$codes = explode('~', $pl['header_product']);
+			
+			foreach($baseProductsArray as $bpa)
+			{
+				
+				if(in_array($bpa['code'], $codes))
+				{
+					$data['header_product'][] = $bpa;
+					$res['good'][] = $bpa['code'];
+				}
+				else
+				{
+					$data['products'][] = $bpa;
+					$res['ass'][] = $bpa;
+				}
+				
+			}
+		}
+		
+		return var_dump($res);
+});
 
 //Route::controller('accounts', 'AccountsController');
+
+//Route::controller('test', 'TestController');
 
 Route::controller('catalogue', 'CatalogueController');
 
 Route::controller('reminders', 'RemindersController');
 
 Route::resource('product', 'ProductController');
+
+Route::resource('category', 'CategoryController');
+
+Route::resource('productline', 'ProductlineController');
+
+Route::get('manufacturer/dice/{id}', 'ManufacturerController@dice');
+Route::resource('manufacturer', 'ManufacturerController');
 

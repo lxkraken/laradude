@@ -13,7 +13,15 @@ class ProductController extends BaseController {
 		
 		$product = Product::findOrFail(strtoupper($id));
 		
-		$data = $product->toArray();
+		$data['product'] = $product->toArray();
+		
+		$productline = Productline::findOrFail($product->pl_id);
+		
+		$data['productline'] = $productline->toArray();
+		
+		// Holy fuck it works!!!
+		$bc = new Breadcrumbs();
+		$data['breadcrumbs'] = $bc->getBreadcrumbs();
 		
 		$this->layout->content = View::make('catalogue.product', $data);
 	}

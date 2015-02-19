@@ -20,3 +20,18 @@ body {
 .productline_box {
 	padding:2px;
 }
+
+a:link {color:#000;text-decoration:none;}      /* unvisited link */
+a:visited {color:#4D4D4D;text-decoration:none;}  /* visited link */
+a:hover {color:#4D4D4D;text-decoration:underline;}  /* mouse over link */
+a:active {color:#000;text-decoration:none;}  /* selected link */
+
+.lightLink a:link {color:#FFF;text-decoration:none;}      /* unvisited link */
+.lightLink a:visited {color:#FFF;text-decoration:none;}  /* visited link */
+.lightLink a:hover {color:#FFF;text-decoration:underline;}  /* mouse over link */
+.lightLink a:active {color:#FFF;text-decoration:none;}  /* selected link */
+
+.darkLink a:link {color:#000;text-decoration:none;}      /* unvisited link */
+.darkLink a:visited {color:#0000;text-decoration:none;}  /* visited link */
+.darkLink a:hover {color:#000;text-decoration:underline;}  /* mouse over link */
+.darkLink a:active {color:#000;text-decoration:none;}  /* selected link */

@@ -9,6 +9,12 @@ class Category extends Eloquent {
 	 */
 	protected $table = 'categories';
 	protected $primaryKey = 'cat_id';
-
+	
+	/*public function scopeMenuOrderAscending($query)
+	{
+		return $query->orderBy('menuOrder', 'ASC');
+	}*/
+	
+	
 
 }

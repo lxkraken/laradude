@@ -11,10 +11,11 @@
     <title>Distribution Dude</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" -->
+    {{ HTML::style('bootstrap/dist/css/bootstrap.min.css') }} 
     <!-- Bootstrap theme -->
-    <link href="../bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
-
+    <!-- link href="../bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" -->
+	{{ HTML::style('bootstrap/dist/css/bootstrap-theme.min.css') }} 
     <!-- Custom styles for this template -->
     {{ HTML::style('theme.css') }} 
 
@@ -75,10 +76,10 @@
             <li class="dropdown">
               <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Catalogue <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-				<li>{{ HTML::link('/fcat', 'Jeux en fran&ccedil;ais') }}</li>
-				<li>{{ HTML::link('/ecat', 'Jeux en anglais') }}</li>
-				<li>{{ HTML::link('/dcat', 'D&eacute;s et accessoires') }}</li>
-				<li>{{ HTML::link('/bcat', 'Les B&eacute;belles') }}</li>
+				<li>{{ HTML::link('/catalogue/f', 'Jeux en fran&ccedil;ais') }}</li>
+				<li>{{ HTML::link('/catalogue/e', 'Jeux en anglais') }}</li>
+				<li>{{ HTML::link('/catalogue/dice', 'D&eacute;s et accessoires') }}</li>
+				<li>{{ HTML::link('/catalogue/b', 'Les B&eacute;belles') }}</li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
@@ -151,10 +152,10 @@
                 <ul class="dropdown-menu" role="menu">
 			      <li><a href="new">Tout neuf</a></li>
 			      <li class="divider"></li>
-				  <li><a href="fcat">Jeux en fran&ccedil;ais</a></li>
-				  <li><a href="ecat">Jeux en anglais</a></li>
-				  <li><a href="dcat">D&eacute;s et accessoires</a></li>
-				  <li><a href="bcat">Les B&eacute;belles</a></li>
+				<li>{{ HTML::link('/catalogue/f', 'Jeux en fran&ccedil;ais') }}</li>
+				<li>{{ HTML::link('/catalogue/e', 'Jeux en anglais') }}</li>
+				<li>{{ HTML::link('/catalogue/dice', 'D&eacute;s et accessoires') }}</li>
+				<li>{{ HTML::link('/catalogue/b', 'Les B&eacute;belles') }}</li>
                   <li class="divider"></li>
                   <li class="dropdown-header">Nav header</li>
                   <li><a href="#">Separated link</a></li>
@@ -234,10 +235,10 @@
 				   <li class="divider"></li>
                   <li class="dropdown-header">Catalogue</li>
 			      
-				  <li><a href="fcat">Jeux en fran&ccedil;ais</a></li>
-				  <li><a href="ecat">Jeux en anglais</a></li>
-				  <li><a href="dcat">D&eacute;s et accessoires</a></li>
-				  <li><a href="bcat">Les B&eacute;belles</a></li>
+				<li>{{ HTML::link('/catalogue/f', 'Jeux en fran&ccedil;ais') }}</li>
+				<li>{{ HTML::link('/catalogue/e', 'Jeux en anglais') }}</li>
+				<li>{{ HTML::link('/catalogue/dice', 'D&eacute;s et accessoires') }}</li>
+				<li>{{ HTML::link('/catalogue/b', 'Les B&eacute;belles') }}</li>
                 </ul>
               </li>
               
@@ -267,8 +268,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="../bootstrap/assets/js/docs.min.js"></script>
+    <script src="http://distributiondude.ca/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="http://distributiondude.ca/bootstrap/assets/js/docs.min.js"></script>
   </body>
 </html>
 
@@ -305,8 +306,8 @@
             <li class="dropdown">
               <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Catalogue <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-				<li><a href="fcat">Jeux en fran&ccedil;ais</a></li>
-				<li><a href="ecat">Jeux en anglais</a></li>
+				<li><a href="catalogue/f">Jeux en fran&ccedil;ais</a></li>
+				<li><a href="catalogue/e">Jeux en anglais</a></li>
 				<li><a href="dcat">D&eacute;s et accessoires</a></li>
 				<li><a href="bcat">Les B&eacute;belles</a></li>
                 <li class="divider"></li>
