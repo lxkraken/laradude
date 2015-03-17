@@ -10,7 +10,9 @@ class AccountsController extends BaseController {
 	
 	public function postSignin() {
 		
-		if (Auth::attempt(array('username'=>Input::get('username'), 'password'=>Input::get('password')))) {
+		$remember = (Input::get('remember') == 'true') ? true : false;
+		
+		if (Auth::attempt(array('username'=>Input::get('username'), 'password'=>Input::get('password')), $remember) {
 			return Redirect::to('accounts/dashboard')->with('message', 'You are now logged in!');
 		} else {
 			return Redirect::to('accounts/login')

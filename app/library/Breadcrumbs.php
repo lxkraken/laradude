@@ -13,7 +13,7 @@ class Breadcrumbs {
 	
 		$this->pathElements = explode('/', Request::path());
 		$this->catlang = Session::get('catlang', 'f');
-		$this->isAdmin = (Auth::check() && Auth::account()->rank > 1) ? TRUE : FALSE;
+		$this->isAdmin = (Auth::check() && Auth::user()->rank > 1) ? TRUE : FALSE;
 
 	}
 
@@ -93,7 +93,7 @@ class Breadcrumbs {
 				$p = DB::table('products')
 								->where('pl_id', '=', $id)
 								->take(1)
-								->select('cat_id')
+								->select('cat_id', 'man_id')
 								->get();
 			}
 			else
@@ -102,21 +102,29 @@ class Breadcrumbs {
 								->where('pl_id', '=', $id)
 								->where('display', '=', 'true')
 								->take(1)
-								->select('cat_id')
+								->select('cat_id', 'man_id')
 								->get();
 			}
 			
-			
+			$name = (strlen($pl->f_name) < 1)  ? stripslashes($pl->e_name) : stripslashes($pl->f_name);
 			
 			if($this->pathElements[0] == 'productline')
 			{
-				$this->generateCatalogueCrumb();
-				$this->generateCategoryCrumb($p[0]->cat_id);
-				$this->breadcrumbs[] = array('link' => 'active', 'text' => stripslashes($pl->f_name));
+				
+				if($this->catlang == 'dice')
+				{
+				    $this->generateManufacturerCrumb($p[0]->man_id);
+				}
+				else
+				{
+					$this->generateCatalogueCrumb();
+					$this->generateCategoryCrumb($p[0]->cat_id);
+				}
+				$this->breadcrumbs[] = array('link' => 'active', 'text' => $name);
 			}
 			else
 			{
-				$this->breadcrumbs[] = array('link' => '/productline/'.$id, 'text' => stripslashes($pl->f_name));
+				$this->breadcrumbs[] = array('link' => '/productline/'.$id, 'text' => $name);
 			}
 		}	
 		
@@ -133,7 +141,9 @@ class Breadcrumbs {
 		
 		$this->generateProductlineCrumb($p->pl_id);
 		
-		$this->breadcrumbs[] = array('link' => 'active', 'text' => stripslashes($p->f_name));
+		$name = (strlen($p->f_name) < 1)  ? stripslashes($p->e_name) : stripslashes($p->f_name);
+		
+		$this->breadcrumbs[] = array('link' => 'active', 'text' => $name);
 		
 		
 	}

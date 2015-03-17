@@ -3,11 +3,12 @@
 class CatalogueController extends BaseController {
 
 	protected $layout = 'layouts.main';
+	protected $data;
 	protected $isAdmin;
 	
 	public function __construct() {
 		
-		$this->isAdmin = (Auth::check() && Auth::account()->rank > 1) ? TRUE : FALSE;
+		$this->isAdmin = (Auth::check() && Auth::user()->rank > 1) ? TRUE : FALSE;
 	}
 
 	public function getIndex($catlang='') {
@@ -15,6 +16,8 @@ class CatalogueController extends BaseController {
 		if (Session::has('catlang') && strlen($catlang) < 1) $catlang = Session::get('catlang');
 		
 		if($catlang == 'dice') {
+			
+			Session::put('catlang', 'dice');
 			
 			if($this->isAdmin)
 			{
@@ -49,17 +52,17 @@ class CatalogueController extends BaseController {
 			foreach($manufacturers as $m)
 			{
 				
-				$data['manufacturers'][$x]['id'] = $m->man_id;
-				$data['manufacturers'][$x]['name'] = $m->name;
-				$data['manufacturers'][$x]['logo'] = $m->logo;
+				$this->data['manufacturers'][$x]['id'] = $m->man_id;
+				$this->data['manufacturers'][$x]['name'] = $m->name;
+				$this->data['manufacturers'][$x]['logo'] = $m->logo;
 				
 				$x++;
 			}
 			
 			$bc = new Breadcrumbs();
-			$data['breadcrumbs'] = $bc->getBreadcrumbs();
+			$this->data['breadcrumbs'] = $bc->getBreadcrumbs();
 			
-			$this->layout->content = View::make('catalogue.dice', $data);
+			$this->layout->content = View::make('catalogue.dice', $this->data);
 			
 		} else if ($catlang == 'b') {
 			
@@ -89,15 +92,15 @@ class CatalogueController extends BaseController {
 			
 			ksort($cat);
 			
-			$data['categories'] = array_values($cat);
+			$this->data['categories'] = array_values($cat);
 			
 			Session::put('catlang', $catlang);
 			
 			// Holy fuck it works!!!
 			$bc = new Breadcrumbs();
-			$data['breadcrumbs'] = $bc->getBreadcrumbs();		
+			$this->data['breadcrumbs'] = $bc->getBreadcrumbs();		
 			
-			$this->layout->content = View::make('catalogue.categories', $data);
+			$this->layout->content = View::make('catalogue.categories', $this->data);
 
 			
 		}
@@ -138,12 +141,12 @@ class CatalogueController extends BaseController {
 			foreach($manufacturers as $m)
 			{
 				
-				$data['m'][$x]['id'] = $m->id;
-				$data['m'][$x]['name'] = $m->name;
-				$data['m'][$x]['name'] = $m->logo;
+				$this->data['m'][$x]['id'] = $m->id;
+				$this->data['m'][$x]['name'] = $m->name;
+				$this->data['m'][$x]['name'] = $m->logo;
 			}
 			
-			$this->layout->content = View::make('catalogue.manufacturers', $data);
+			$this->layout->content = View::make('catalogue.manufacturers', $this->data);
 		
 	}
 

@@ -2,7 +2,7 @@
 	<div class="form">
 		<div class="form-group center-block" style="max-width:500px;">
 
-{{ Form::open(array('url'=>'accounts/signin')) }}
+{{ Form::open(array('url'=>'account/signin')) }}
 
     <h2 class="form-signin-heading">Se connecter</h2>
 	<div class="form-group">
@@ -12,6 +12,9 @@
 	<div class="form-group">
 		{{ Form::label('password', 'Mot de passe', array('for'=>'password')) }}
 		{{ Form::password('password', array('class'=>'form-control', 'id' => 'inputPassword', 'placeholder'=>'Mot de passe')) }}
+	</div>
+	<div class="form-group">
+		{{ Form::checkbox('remember', '1', 'true') }} {{ Form::label('remember', 'Se souvenir de moi', array('for'=>'remember')) }}
 	</div>
  
     {{ Form::submit('Se connecter', array('class'=>'btn btn-primary'))}} <span style="float:right;">{{ HTML::link('reminders/remind', 'Vous avez oubli&eacute; votre mot de passe?') }} </span>

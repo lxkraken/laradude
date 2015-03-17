@@ -1,6 +1,8 @@
 <?php
 
 class TestController extends BaseController {
+	
+	protected $layout = 'layouts.main';
 
 	/*
 	|--------------------------------------------------------------------------
@@ -15,7 +17,20 @@ class TestController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
+	
+	public function getIndex()
+	{
+		
+		$hashedPassword = Hash::make('kraK3n');
+		
+		if (Hash::check('kr4K3n', $hashedPassword))
+		{
+			$this->layout->content = 'oi!';
+		}
+		
+	}
+
+	/*public function showWelcome()
 	{
 		return View::make('hello');
 	}
@@ -32,6 +47,6 @@ class TestController extends BaseController {
 		return var_dump($manufacturers);
 		
 		
-	}
+	}*/
 
 }

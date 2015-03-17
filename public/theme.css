@@ -1,6 +1,7 @@
 body {
   padding-top: 70px;
   padding-bottom: 30px;
+  background-color:#F6F5F0;
 }
 
 .theme-dropdown .dropdown-menu {
@@ -19,6 +20,10 @@ body {
 
 .productline_box {
 	padding:2px;
+}
+
+.breadcrumb {
+	background-color:#E5E5E5;
 }
 
 a:link {color:#000;text-decoration:none;}      /* unvisited link */

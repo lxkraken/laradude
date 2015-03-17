@@ -4,10 +4,11 @@ class CategoryController extends BaseController {
 
 	protected $layout = 'layouts.main';
 	protected $isAdmin;
+	protected $data;
 	
 	public function __construct() {
 		
-		$this->isAdmin = (Auth::check() && Auth::account()->rank > 1) ? TRUE : FALSE;
+		$this->isAdmin = (Auth::check() && Auth::user()->rank > 1) ? TRUE : FALSE;
 	}
 
 	public function index() {
@@ -38,8 +39,8 @@ class CategoryController extends BaseController {
 						  $query->where('products.prod_lang', '=', $catlang)
 							    ->orWhere('products.prod_lang', '=', 'm');
 					  })
-					->select('productlines.pl_id', 'productlines.e_name', 'productlines.f_name', 'productlines.f_logo_url', 'productlines.f_caption', 'productlines.'.$qNumProd)
-					->orderBy('productlines.f_name', 'ASC')
+					->select('productlines.pl_id', 'productlines.e_name', 'productlines.f_name', 'productlines.f_logo_url', 'productlines.e_logo_url', 'productlines.f_caption', 'productlines.'.$qNumProd)
+					->orderBy('productlines.'.$catlang.'_name')
 					->distinct()
 					->get();
 				
@@ -57,8 +58,8 @@ class CategoryController extends BaseController {
 						  $query->where('products.prod_lang', '=', $catlang)
 							    ->orWhere('products.prod_lang', '=', 'm');
 					  })
-					->select('productlines.pl_id', 'productlines.e_name', 'productlines.f_name', 'productlines.f_logo_url', 'productlines.f_caption', 'productlines.'.$qNumProd)
-					->orderBy('productlines.f_name', 'ASC')
+					->select('productlines.pl_id', 'productlines.e_name', 'productlines.f_name', 'productlines.f_logo_url', 'productlines.e_logo_url', 'productlines.f_caption', 'productlines.'.$qNumProd)
+					->orderBy('productlines.'.$catlang.'_name')
 					->distinct()
 					->get();
 				
@@ -73,8 +74,8 @@ class CategoryController extends BaseController {
 				$productlines = DB::table('productlines')
 					->join('products', 'productlines.pl_id', '=', 'products.pl_id')
 					->where('products.cat_id', '=', $id)
-					->select('productlines.pl_id', 'productlines.e_name', 'productlines.f_name', 'productlines.f_logo_url', 'productlines.f_caption', 'productlines.'.$qNumProd)
-					->orderBy('productlines.f_name', 'ASC')
+					->select('productlines.pl_id', 'productlines.e_name', 'productlines.f_name', 'productlines.f_logo_url', 'productlines.e_logo_url', 'productlines.f_caption', 'productlines.'.$qNumProd)
+					->orderBy('productlines.'.$catlang.'_name')
 					->distinct()
 					->get();
 				
@@ -87,9 +88,8 @@ class CategoryController extends BaseController {
 					->join('products', 'productlines.pl_id', '=', 'products.pl_id')
 					->where('products.display', '=', 'true')
 					->where('products.cat_id', '=', $id)
-					->select('productlines.pl_id', 'productlines.e_name', 'productlines.f_name', 'productlines.f_logo_url', 'productlines.f_caption', 'productlines.'.$qNumProd)
-					->orderBy('f_name', 'ASC')
-					->orderBy('productlines.f_name', 'ASC')
+					->select('productlines.pl_id', 'productlines.e_name', 'productlines.f_name', 'productlines.f_logo_url', 'productlines.e_logo_url', 'productlines.f_caption', 'productlines.'.$qNumProd)
+					->orderBy('productlines.'.$catlang.'_name')
 					->distinct()
 					->get();
 				
@@ -103,7 +103,7 @@ class CategoryController extends BaseController {
 		
 		$category = Category::findOrFail($id);
 		
-		$data['catName'] = $category->f_name;
+		$this->data['catName'] = $category->f_name;
 		
 		$x = 0;
 		
@@ -111,34 +111,51 @@ class CategoryController extends BaseController {
 		{
 
 			
-			$data['pl'][$x]['id'] = $p->pl_id;
+			$this->data['pl'][$x]['id'] = $p->pl_id;
 			
 			$n = (strlen($p->f_name) > 0) ? $p->f_name : $p->e_name;
 			$name = explode('~', $n);
-			$data['pl'][$x]['name'] = rtrim($name[0]);
+			$this->data['pl'][$x]['name'] = rtrim($name[0]);
 			
-			$data['pl'][$x]['caption'] = $p->f_caption;
-			$data['pl'][$x]['logo'] = $p->f_logo_url;
+			$this->data['pl'][$x]['caption'] = $p->f_caption;
+			$this->data['pl'][$x]['logo'] = (strlen($p->f_logo_url) > 2) ? $p->f_logo_url : $p->e_logo_url;
 			
 			if($p->$qNumProd > 1)
 			{
-				$data['pl'][$x]['link'] = '/productline/'.$p->pl_id;
+				$this->data['pl'][$x]['link'] = '/productline/'.$p->pl_id;
 			}
 			else
 			{
 				$prod = ($this->isAdmin) ? DB::table('products')->where('pl_id', '=', $p->pl_id)->select('code')->get() : DB::table('products')->where('pl_id', '=', $p->pl_id)->where('display', '=', 'true')->select('code')->get();
-				$data['pl'][$x]['link'] = '/product/'.$prod[0]->code;
+				$this->data['pl'][$x]['link'] = '/product/'.$prod[0]->code;
 			}
 			
 			$x++;
 		}
 		
+		$this->array_sort_by_column($this->data['pl'], 'name');
+		
 		// Holy fuck it works!!!
 		$bc = new Breadcrumbs();
-		$data['breadcrumbs'] = $bc->getBreadcrumbs();
+		$this->data['breadcrumbs'] = $bc->getBreadcrumbs();
 
 		
-		$this->layout->content = View::make('catalogue.productlines', $data);
+		$this->layout->content = View::make('catalogue.productlines', $this->data);
+	}
+
+
+
+//------------------------------------------
+	private function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
+		$sort_col = array();
+		foreach ($arr as $key=> $row) {
+			$sort_col[$key] = $row[$col];
+		}
+
+		array_multisort($sort_col, $dir, $arr);
+		
+		//USE:
+		//array_sort_by_column($array, 'order');
 	}
 	
 }

@@ -19,33 +19,57 @@
 		
 <!-- Main Window -->
 		
-      <div class="img-rounded" style="padding-top:40px;padding-bottom:10px;background-image:url({{ asset('../img/backgrounds/'.$productline['bg_url']) }});background-repeat:no-repeat;background-size:contain;color:#{{ $productline['fg_color'] }};background-color:#{{ $productline['bg_color'] }};">
-        <div class="img-rounded center-block" style="background-image:url({{ asset ('../img/transpDot.png') }});background-repeat: repeat;padding:10px;width:97%;">
+	<div class="img-rounded" style="padding-bottom:10px;
+	
+	@if(strlen($productline['bg_url']) > 2)
+		padding-top:40px;background-image:url({{ asset('../img/backgrounds/'.$productline['bg_url']) }});background-repeat:no-repeat;background-size:contain;
+	@endif
+	
+	@if(strlen($productline['fg_color']) > 2)
+		color:#{{ $productline['fg_color'] }};
+	@endif
+	
+	@if(strlen($productline['bg_color']) > 2)
+		background-color:#{{ $productline['bg_color'] }};
+	@endif
+	">
+	
+	  <div class="img-rounded center-block" style="
+	  
+	  @if($productline['transp_bg'] == 'true')
+		background-image:url({{ asset ('../img/transpDot.png') }});background-repeat: repeat;
+	  @endif
+	  
+	  padding:10px;width:97%;">
 			
 				<!-- xs -->
-				<h1 class="visible-xs-block" style="font-size:24px;">{{ $productline['f_name'] }}</h1>
+				<h1 class="visible-xs-block" style="font-size:24px;">{{ $productline['name'] }}</h1>
 						
 				<!-- sm -->
-				<h1 class="visible-sm-block" style="font-size:30px;">{{ $productline['f_name'] }}</h1>
+				<h1 class="visible-sm-block" style="font-size:30px;">{{ $productline['name'] }}</h1>
 
-				<h1 class="visible-lg-block visible-md-block" style="font-size:36px;">{{ $productline['f_name'] }}</h1>
+				<h1 class="visible-lg-block visible-md-block" style="font-size:36px;">{{ $productline['name'] }}</h1>
 						
-				 <hr style="border-color: #{{ $productline['fg_color'] }}">
+        @if(strlen($productline['fg_color']) > 2)
+          <hr style="border-color: #{{ $productline['fg_color'] }};" />
+        @else
+          <hr style="border-color: #cccccc;" />
+        @endif
 			
 			<div class="row hidden-xs">
 			  <div class="col-sm-6">
 				@if(File::exists('img/covers/'.strtolower($product['code']).'c.png'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.png', $product['f_name'], array('class' => 'img-responsive pull-right')) }}
+				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.png', $product['name'], array('class' => 'img-responsive pull-right')) }}
 				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.jpg'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpg', $product['f_name'], array('class' => 'img-responsive pull-right')) }}				
+				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpg', $product['name'], array('class' => 'img-responsive pull-right')) }}				
 				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.jpeg'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpeg', $product['f_name'], array('class' => 'img-responsive pull-right')) }}
+				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpeg', $product['name'], array('class' => 'img-responsive pull-right')) }}
 				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.gif'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.gif', $product['f_name'], array('class' => 'img-responsive pull-right')) }}
+				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.gif', $product['name'], array('class' => 'img-responsive pull-right')) }}
 				@endif
 			  </div>
 			  <div class="col-sm-6">
-			    <h4>{{ $product['f_name'] }}</h4>
+			    <h4>{{ $product['name'] }}</h4>
 			    
 				<p>{{ strtoupper($product['code']) }}
 				
@@ -83,12 +107,19 @@
 				@endif
 				
 				</p>
-				<div class="input-group">
+				<div class="input-group text-center">
 				  
 				  {{ Form::open(array('url' => 'foo/bar')) }}
-				  {{ Form::label('qty', 'J\'en veux:') }}
-				  {{ Form::number('qty', 1, array('style' => 'color:#000;width:40px;padding-left:5px;', 'class' => 'img-rounded')) }}
-				  <input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:4px;" type="image">
+
+						<input id="buy-{{ $product['code'] }}" type="text" class="form-control" name="buy-{{ $product['code'] }}" value="1" style="width:40px;">
+						<!-- input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:6px;" type="image" -->
+						    <button type="submit" class="btn btn-success btn-sm" style="margin-top:20px;"><span class="glyphicon glyphicon-shopping-cart"></span> Acheter</button>
+					<script>
+						$("input[name='buy-{{ $product['code'] }}']").TouchSpin({
+							min: 1
+							});
+					</script>
+
 					{{ Form::close() }}
 				</div>
 	  
@@ -98,17 +129,17 @@
 			<div class="row visible-xs-block">
 			  <div class="col-xs-12">
 				@if(File::exists('img/covers/'.strtolower($product['code']).'c.png'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.png', $product['f_name'], array('class' => 'img-responsive pull-right')) }}
+				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.png', $product['name'], array('class' => 'img-responsive pull-right')) }}
 				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.jpg'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpg', $product['f_name'], array('class' => 'img-responsive pull-right')) }}				
+				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpg', $product['name'], array('class' => 'img-responsive pull-right')) }}				
 				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.jpeg'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpeg', $product['f_name'], array('class' => 'img-responsive pull-right')) }}
+				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpeg', $product['name'], array('class' => 'img-responsive pull-right')) }}
 				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.gif'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.gif', $product['f_name'], array('class' => 'img-responsive pull-right')) }}
+				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.gif', $product['name'], array('class' => 'img-responsive pull-right')) }}
 				@endif
 			  </div>
 			  <div class="col-xs-12 text-center">
-			    <h4>{{ $product['f_name'] }}</h4>
+			    <h4>{{ $product['name'] }}</h4>
 			    
 				<p>{{ strtoupper($product['code']) }}
 				
@@ -158,7 +189,8 @@
 			</div>
 			
 			
-			<p style="margin-top:40px;">{{ $product['f_desc1'] }}</p>
+			<p style="margin-top:40px;">{{ $product['description'] }}</p>
+
 		</div>
 	  </div>
 	

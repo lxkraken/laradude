@@ -4,10 +4,11 @@ class ManufacturerController extends BaseController {
 
 	protected $layout = 'layouts.main';
 	protected $isAdmin;
+	protected $data;
 	
 	public function __construct() {
 		
-		$this->isAdmin = (Auth::check() && Auth::account()->rank > 1) ? TRUE : FALSE;
+		$this->isAdmin = (Auth::check() && Auth::user()->rank > 1) ? TRUE : FALSE;
 	}
 
 	public function index()
@@ -44,7 +45,7 @@ class ManufacturerController extends BaseController {
 		
 		$manufacturer = Manufacturer::findOrFail($id);
 		
-		$data['catName'] = $manufacturer->name;
+		$this->data['catName'] = $manufacturer->name;
 		
 		$x = 0;
 		
@@ -52,11 +53,11 @@ class ManufacturerController extends BaseController {
 		{
 			$pl = Productline::findOrFail($plId->pl_id);
 			
-			$data['pl'][$x]['id'] = $plId->pl_id;
-			$data['pl'][$x]['name'] = $pl->f_name;
-			$data['pl'][$x]['logo'] = $pl->f_logo_url;
-			$data['pl'][$x]['caption'] = $pl->f_caption;
-			$data['pl'][$x]['link'] = '/productline/'.$plId->pl_id;
+			$this->data['pl'][$x]['id'] = $plId->pl_id;
+			$this->data['pl'][$x]['name'] = $pl->f_name;
+			$this->data['pl'][$x]['logo'] = $pl->f_logo_url;
+			$this->data['pl'][$x]['caption'] = $pl->f_caption;
+			$this->data['pl'][$x]['link'] = '/productline/'.$plId->pl_id;
 			
 			$x++;
 
@@ -66,9 +67,9 @@ class ManufacturerController extends BaseController {
 		
 		// Holy fuck it works!!!
 		$bc = new Breadcrumbs();
-		$data['breadcrumbs'] = $bc->getBreadcrumbs();
+		$this->data['breadcrumbs'] = $bc->getBreadcrumbs();
 		
-		$this->layout->content = View::make('catalogue.productlines', $data);
+		$this->layout->content = View::make('catalogue.productlines', $this->data);
 	}
 
 }

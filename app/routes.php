@@ -33,59 +33,62 @@ Route::get('users', function()
 
 Route::get('catalogue/{lang?}', 'CatalogueController@getIndex');
 
-Route::get('test', function(){
+/*Route::get('search/{q?}', function($q='ass'){
 	
-	$data['productline']['header_product'] = 'UBIZC01~UBIZC04';
+	$s = new Search($q);
 	
-	$pl['header_product'] = 'UBIZC01~UBIZC04';
+	$result = $s->getSearchResults();
+	//$result = $s->l4Search();
+	$queries = DB::getQueryLog();
+	//$result = end($queries);*/
+	
+	/*foreach($result as $r)
+	{
+		var_dump($r->code).'<br/><br/>';
+	}*/
+	
+	/*return var_dump($result);
+	
+});*/
 
-		$baseProducts = Product::productline(255)->subproductline(0)->prodlang('f')->orderBy('prod_type')->orderBy('code')->display()->get();
-				
-		$baseProductsArray = $baseProducts->toArray();
-		
-		if($data['productline']['header_product'] == 0)
-		{
-			$data['products'] = $baseProductsArray;
-			$data['header_product'] = 'none';
-		}
-		if($data['productline']['header_product'] == 1)
-		{
-			$data['header_product'] = array_shift($baseProductsArray);
-			$data['products'] = $baseProductsArray;
-			
+Route::get('test', function()
+{
+$hash1 = Hash::make('1234'); // A hash is generated
+$hash2 = Hash::make('1234'); // Another hash is generated that differs from the first one
 
-		}
-		else
-		{
-			
-			unset($data['header_product']);
-			$codes = explode('~', $pl['header_product']);
-			
-			foreach($baseProductsArray as $bpa)
-			{
-				
-				if(in_array($bpa['code'], $codes))
-				{
-					$data['header_product'][] = $bpa;
-					$res['good'][] = $bpa['code'];
-				}
-				else
-				{
-					$data['products'][] = $bpa;
-					$res['ass'][] = $bpa;
-				}
-				
-			}
-		}
-		
-		return var_dump($res);
+var_dump(Hash::check('1234', $hash1) && Hash::check('1234', $hash2));
+
+$user = Account::where('email', '=', 'alex@distributiondude.com')->firstOrFail();
+
+/*$pass = Hash::make('kr4K3n');
+
+$user->password = $pass;
+
+$user->save();*/
+
+echo '<br /><br />';
+
+var_dump(Hash::check('sherbet', $user->password));
+
+
+echo '<br />'.$user->password.'<br />';
+
+
+var_dump($user);
+
 });
 
-//Route::controller('accounts', 'AccountsController');
+Route::controller('account', 'AccountController');
 
 //Route::controller('test', 'TestController');
 
+//Route::get('search/{q?}', 'SearchController@getIndex');
+
+Route::controller('search', 'SearchController');
+
 Route::controller('catalogue', 'CatalogueController');
+
+Route::controller('password', 'RemindersController');
 
 Route::controller('reminders', 'RemindersController');
 

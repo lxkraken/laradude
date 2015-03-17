@@ -4,11 +4,12 @@ class ProductlineController extends BaseController {
 
 	protected $layout = 'layouts.main';
 	protected $isAdmin;
+	protected $data;
 
 	
 	public function __construct()
 	{
-		$this->isAdmin = (Auth::check() && Auth::account()->rank > 1) ? TRUE : FALSE;
+		$this->isAdmin = (Auth::check() && Auth::user()->rank > 1) ? TRUE : FALSE;
 
 	}
 
@@ -49,7 +50,9 @@ class ProductlineController extends BaseController {
 		
 		$pl = Productline::findOrFail($id);
 		 
-		$data['productline'] = $pl->toArray();
+		$this->data['productline'] = $pl->toArray();
+		
+		$this->data['productline']['name'] = (strlen($this->data['productline']['f_name']) < 1)  ? $this->data['productline']['e_name'] : $this->data['productline']['f_name'];
 		
 		
 		/**************************
@@ -62,34 +65,41 @@ class ProductlineController extends BaseController {
 				
 		$baseProductsArray = $baseProducts->toArray();
 		
-		if(strlen($data['productline']['header_product']) > 1)
+		for($x = 0 ; $x < count($baseProductsArray); $x++)
 		{
-			$codes = explode('~', $data['productline']['header_product']);
+			$baseProductsArray[$x]['name'] = (strlen($baseProductsArray[$x]['f_name']) < 1)  ? stripslashes($baseProductsArray[$x]['e_name']) : stripslashes($baseProductsArray[$x]['f_name']);
+			$baseProductsArray[$x]['description'] = (strlen($baseProductsArray[$x]['f_desc1']) < 1)  ? stripslashes($baseProductsArray[$x]['e_desc1']).stripslashes($baseProductsArray[$x]['e_desc2']) : stripslashes($baseProductsArray[$x]['f_desc1']).stripslashes($baseProductsArray[$x]['f_desc2']);
+
+		}
+		
+		if(strlen($this->data['productline']['header_product']) > 1)
+		{
+			$codes = explode('~', $this->data['productline']['header_product']);
 			
 			foreach($baseProductsArray as $bpa)
 			{
 				if(in_array($bpa['code'], $codes))
 				{
-					$data['header_product'][] = $bpa;
+					$this->data['header_product'][] = $bpa;
 				}
 				else
 				{
-					$data['products'][] = $bpa;
+					$this->data['products'][] = $bpa;
 				}
 				
 			}
 			
 		}
-		elseif($data['productline']['header_product'] == 1)
+		elseif($this->data['productline']['header_product'] == 1)
 		{
-			$data['header_product'] = array_shift($baseProductsArray);
-			$data['products'] = $baseProductsArray;
+			$this->data['header_product'] = array_shift($baseProductsArray);
+			$this->data['products'] = $baseProductsArray;
 
 		}
 		else
 		{
-			$data['products'] = $baseProductsArray;
-			$data['header_product'] = 'none';
+			$this->data['products'] = $baseProductsArray;
+			$this->data['header_product'] = 'none';
 		}
 		
 		
@@ -127,10 +137,16 @@ class ProductlineController extends BaseController {
 			
 			foreach($subpls as $s)
 			{
-				$data['subproductlines'][$x]['subpl_id'] = $s->subpl_id;
-				$data['subproductlines'][$x]['f_name'] = $s->f_name;
-				$data['subproductlines'][$x]['e_name'] = $s->e_name;
-				$data['subproductlines'][$x]['logo'] = $s->logo_url;
+				$this->data['subproductlines'][$x]['subpl_id'] = $s->subpl_id;
+				
+				$n = (strlen($s->f_name) < 1)  ? stripslashes($s->e_name) : stripslashes($s->f_name);
+				$nArr = explode('~', $n);
+				
+				$this->data['subproductlines'][$x]['name'] = $nArr[0];
+				
+				/*$data['subproductlines'][$x]['f_name'] = $s->f_name;
+				$data['subproductlines'][$x]['e_name'] = $s->e_name;*/
+				$this->data['subproductlines'][$x]['logo'] = $s->logo_url;
 				
 				$products = ($this->isAdmin) ?
 							 Product::subproductline($s->subpl_id)->productline($id)->prodlang($catlang)->orderBy('prod_type')->orderBy('code')->get() :
@@ -138,21 +154,44 @@ class ProductlineController extends BaseController {
 				
 				$productsArray = $products->toArray();
 				
-				$data['subproductlines'][$x]['products'] = $productsArray;
+				for($z = 0 ; $z < count($productsArray); $z++)
+				{
+					$productsArray[$z]['subtitle'] = (strlen($productsArray[$z]['f_subtitle']) < 1)  ? stripslashes($productsArray[$z]['e_subtitle']) : stripslashes($productsArray[$z]['f_subtitle']);
+					$productsArray[$z]['name'] = (strlen($productsArray[$z]['f_name']) < 1)  ? stripslashes($productsArray[$z]['e_name']) : stripslashes($productsArray[$z]['f_name']);
+
+				}
+				
+				$this->data['subproductlines'][$x]['products'] = $productsArray;
 				
 				$x++;
 							 
 			}
+			
+			$this->array_sort_by_column($this->data['subproductlines'], 'name');
 			
 			
 		}
 		
 		// Holy fuck it works!!!
 		$bc = new Breadcrumbs();
-		$data['breadcrumbs'] = $bc->getBreadcrumbs();
+		$this->data['breadcrumbs'] = $bc->getBreadcrumbs();
 		
-		$this->layout->content = View::make('catalogue.productline', $data);
+		$this->layout->content = ($catlang == 'dice') ? View::make('catalogue.diceproductline', $this->data) : View::make('catalogue.productline', $this->data);
 		
+	}
+	
+//-------------------------------
+
+	private function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
+		$sort_col = array();
+		foreach ($arr as $key=> $row) {
+			$sort_col[$key] = $row[$col];
+		}
+
+		array_multisort($sort_col, $dir, $arr);
+		
+		//USE:
+		//array_sort_by_column($array, 'order');
 	}
 	
 }

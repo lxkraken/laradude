@@ -16,6 +16,7 @@ class Account extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	protected $table = 'accounts';
 	protected $primaryKey = 'account_id';
+	protected $guarded = array('account_id', 'password');
 
 	/**
 	 * The attributes excluded from the model's JSON form.

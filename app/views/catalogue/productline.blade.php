@@ -27,21 +27,47 @@
 		
 		
 	">
-	<div class="img-rounded" style="padding-top:40px;padding-bottom:10px;background-image:url({{ asset('../img/backgrounds/'.$productline['bg_url']) }});background-repeat:no-repeat;background-size:contain;color:#{{ $productline['fg_color'] }};background-color:#{{ $productline['bg_color'] }};">
+	<div class="img-rounded" style="padding-bottom:10px;
 	
-	  <div class="img-rounded center-block" style="background-image:url({{ asset ('../img/transpDot.png') }});background-repeat: repeat;padding:10px;width:97%;">
+	@if(strlen($productline['bg_url']) > 2)
+		padding-top:40px;background-image:url({{ asset('../img/backgrounds/'.$productline['bg_url']) }});background-repeat:no-repeat;background-size:contain;
+	@endif
+	
+	@if(strlen($productline['fg_color']) > 2)
+		color:#{{ $productline['fg_color'] }};
+	@endif
+	
+	@if(strlen($productline['bg_color']) > 2)
+		background-color:#{{ $productline['bg_color'] }};
+	@endif
+	">
+	
+	  <div class="img-rounded center-block" style="
+	  
+	  @if($productline['transp_bg'] == 'true')
+		background-image:url({{ asset ('../img/transpDot.png') }});background-repeat: repeat;
+	  @endif
+	  
+	  padding:10px;width:97%;">
         			
 		<!-- lg -->
 		<!-- md -->
-		<h1 class="visible-md-block visible-lg-block" style="font-size:4vmin;">{{ $productline['f_name'] }}</h1>
+		<h1 class="visible-md-block visible-lg-block" style="font-size:4vmin;">{{ $productline['name'] }}</h1>
 					
 		<!-- sm -->
-		<h1 class="visible-sm-block" style="font-size:3vw;">{{ $productline['f_name'] }}</h1>
+		<h1 class="visible-sm-block" style="font-size:3vw;">{{ $productline['name'] }}</h1>
 				
 		<!-- xs -->
-		<h1 class="visible-xs-block" style="font-size:6vmin;">{{ $productline['f_name'] }}</h1>
+		<h1 class="visible-xs-block" style="font-size:6vmin;">{{ $productline['name'] }}</h1>
 
-        <hr style="border-color: #{{ $productline['fg_color'] }}">
+        
+        
+        @if(strlen($productline['fg_color']) > 2)
+          <hr style="border-color: #{{ $productline['fg_color'] }};" />
+        @else
+          <hr style="border-color: #cccccc;" />
+        @endif
+
 				    
 @if($productline['header_product'] == 1)
 
@@ -50,21 +76,21 @@
 		<!-- sm header image -->
 		<div class="row hidden-xs">
 		  <div class="col-sm-6">
-		    @if(strlen($header_product['f_desc1']) > 3)
+		    @if(strlen($header_product['description']) > 3)
 			  <a href="/product/{{ $header_product['code'] }}">
 			@endif
 			
 			@if(File::exists('img/covers/'.strtolower($header_product['code']).'c.png'))
-			  {{ HTML::image('img/covers/'.strtolower($header_product['code']).'c.png', $header_product['f_name'], array('class' => 'img-responsive pull-right')) }}
+			  {{ HTML::image('img/covers/'.strtolower($header_product['code']).'c.png', $header_product['name'], array('class' => 'img-responsive pull-right')) }}
 			@elseif(File::exists('img/covers/'.strtolower($header_product['code']).'c.jpg'))
-			  {{ HTML::image('img/covers/'.strtolower($header_product['code']).'c.jpg', $header_product['f_name'], array('class' => 'img-responsive pull-right')) }}				
+			  {{ HTML::image('img/covers/'.strtolower($header_product['code']).'c.jpg', $header_product['name'], array('class' => 'img-responsive pull-right')) }}				
 			@elseif(File::exists('img/covers/'.strtolower($header_product['code']).'c.jpeg'))
-			  {{ HTML::image('img/covers/'.strtolower($header_product['code']).'c.jpeg', $header_product['f_name'], array('class' => 'img-responsive pull-right')) }}
+			  {{ HTML::image('img/covers/'.strtolower($header_product['code']).'c.jpeg', $header_product['name'], array('class' => 'img-responsive pull-right')) }}
 		    @elseif(File::exists('img/covers/'.strtolower($header_product['code']).'c.gif'))
-			  {{ HTML::image('img/covers/'.strtolower($header_product['code']).'c.gif', $header_product['f_name'], array('class' => 'img-responsive pull-right')) }}
+			  {{ HTML::image('img/covers/'.strtolower($header_product['code']).'c.gif', $header_product['name'], array('class' => 'img-responsive pull-right')) }}
 		    @endif
 						
-			@if(strlen($header_product['f_desc1']) > 3)
+			@if(strlen($header_product['description']) > 3)
 			  </a>
 			@endif
 		  </div>
@@ -74,7 +100,7 @@
 		  <!-- md header description -->
 		  <!-- sm header description -->
 		  <div class="col-sm-6">
-			<h4><a href="/product/{{ $header_product['code'] }}">{{ $header_product['f_name'] }}</a></h4>
+			<h4><a href="/product/{{ $header_product['code'] }}">{{ $header_product['name'] }}</a></h4>
 			<p>
 			  {{ strtoupper($header_product['code']) }}
 			
@@ -111,13 +137,19 @@
 			    Accessoire / Suppl&eacute;ment<br/>
 			  @endif
 			</p>
-			<div class="input-group">
-						  
-			  {{ Form::open(array('url' => 'foo/bar')) }}
-			    {{ Form::label('qty', 'J\'en veux:') }}
-			    {{ Form::number('qty', 1, array('style' => 'color:#000;width:40px;padding-left:5px;', 'class' => 'img-rounded')) }}
-			    <input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:4px;" type="image">
-			  {{ Form::close() }}
+			
+			<div class="input-group text-center">
+			{{ Form::open(array('url' => 'foo/bar')) }}
+
+				<input id="buy-{{ $header_product['code'] }}" type="text" class="form-control" name="buy-{{ $header_product['code'] }}" value="1" style="width:40px;">
+				<button type="submit" class="btn btn-success btn-sm" style="margin-top:10px;"><span class="glyphicon glyphicon-shopping-cart"></span> Acheter</button>
+				<script>
+					$("input[name='buy-{{ $header_product['code'] }}']").TouchSpin({
+						min: 1
+					});
+				</script>
+
+			{{ Form::close() }}
 			</div>
 
 		  </div>
@@ -128,21 +160,21 @@
 		<!-- xs header image -->
 		<div class="row visible-xs-block">
 		  <div class="col-xs-12 text-center">
-		    @if(strlen($header_product['f_desc1']) > 3)
+		    @if(strlen($header_product['description']) > 3)
 			  <a href="/product/{{ $header_product['code'] }}">
 			@endif
 			
 			@if(File::exists('img/thumbs/'.strtolower($header_product['code']).'t.png'))
-			  {{ HTML::image('img/thumbs/'.strtolower($header_product['code']).'t.png', $header_product['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
+			  {{ HTML::image('img/thumbs/'.strtolower($header_product['code']).'t.png', $header_product['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
 			@elseif(File::exists('img/thumbs/'.strtolower($header_product['code']).'t.jpg'))
-			  {{ HTML::image('img/thumbs/'.strtolower($header_product['code']).'t.jpg', $header_product['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}				
+			  {{ HTML::image('img/thumbs/'.strtolower($header_product['code']).'t.jpg', $header_product['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}				
 			@elseif(File::exists('img/thumbs/'.strtolower($header_product['code']).'t.jpeg'))
-			  {{ HTML::image('img/thumbs/'.strtolower($header_product['code']).'t.jpeg', $header_product['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
+			  {{ HTML::image('img/thumbs/'.strtolower($header_product['code']).'t.jpeg', $header_product['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
 			@elseif(File::exists('img/thumbs/'.strtolower($header_product['code']).'t.gif'))
-			  {{ HTML::image('img/thumbs/'.strtolower($header_product['code']).'t.gif', $header_product['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
+			  {{ HTML::image('img/thumbs/'.strtolower($header_product['code']).'t.gif', $header_product['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
 			@endif
 						
-			@if(strlen($header_product['f_desc1']) > 3)
+			@if(strlen($header_product['description']) > 3)
 			  </a>
 			@endif
 		  </div>
@@ -151,13 +183,13 @@
 		  <!-- xs header description -->
 		  <div class="col-xs-12 text-center">
 		    <h4>
-			  @if(strlen($header_product['f_desc1']) > 3)
+			  @if(strlen($header_product['description']) > 3)
 			    <a href="/product/{{ $header_product['code'] }}">
 			  @endif
 						  
-			  {{ $header_product['f_name'] }}
+			  {{ $header_product['name'] }}
 						    
-			  @if(strlen($header_product['f_desc1']) > 3)
+			  @if(strlen($header_product['description']) > 3)
 			    </a>
 			  @endif
 			</h4>
@@ -181,13 +213,19 @@
 				  Accessoire / Suppl&eacute;ment<br/>
 				@endif
 			  </p>
-			  <div class="input-group" style="margin-left:auto;margin-right:auto;">
-			    {{ Form::open(array('url' => 'foo/bar')) }}
-				{{ Form::label('qty', 'J\'en veux:') }}
-				{{ Form::number('qty', 1, array('style' => 'color:#000;width:40px;padding-left:5px;', 'class' => 'img-rounded')) }}
-				<input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:6px;" type="image">
-				{{ Form::close() }}
-			  </div>
+			<div class="input-group text-center">
+			{{ Form::open(array('url' => 'foo/bar')) }}
+
+				<input id="buy-{{ $header_product['code'] }}" type="text" class="form-control" name="buy-{{ $header_product['code'] }}" value="1" style="width:40px;">
+				<button type="submit" class="btn btn-success btn-sm" style="margin-top:10px;"><span class="glyphicon glyphicon-shopping-cart"></span> Acheter</button>
+				<script>
+					$("input[name='buy-{{ $header_product['code'] }}']").TouchSpin({
+						min: 1
+					});
+				</script>
+
+			{{ Form::close() }}
+			</div>
 			</div>
 		  </div>
 
@@ -231,31 +269,31 @@
 	@endif
 
 
-    @if(strlen($h['f_desc1']) > 3)
+    @if(strlen($h['description']) > 3)
 	  <a href="/product/{{ $h['code'] }}">
 	@endif
 		
 	@if(File::exists('img/covers/'.strtolower($h['code']).'c.png'))
-	  {{ HTML::image('img/covers/'.strtolower($h['code']).'c.png', $h['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
+	  {{ HTML::image('img/covers/'.strtolower($h['code']).'c.png', $h['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
 	@elseif(File::exists('img/covers/'.strtolower($h['code']).'c.jpg'))
-	  {{ HTML::image('img/covers/'.strtolower($h['code']).'c.jpg', $h['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}				
+	  {{ HTML::image('img/covers/'.strtolower($h['code']).'c.jpg', $h['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}				
 	@elseif(File::exists('img/covers/'.strtolower($h['code']).'c.jpeg'))
-	  {{ HTML::image('img/covers/'.strtolower($h['code']).'c.jpeg', $h['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
+	  {{ HTML::image('img/covers/'.strtolower($h['code']).'c.jpeg', $h['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
     @elseif(File::exists('img/covers/'.strtolower($h['code']).'c.gif'))
-	  {{ HTML::image('img/covers/'.strtolower($h['code']).'c.gif', $h['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
+	  {{ HTML::image('img/covers/'.strtolower($h['code']).'c.gif', $h['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
     @endif
 						
-	@if(strlen($h['f_desc1']) > 3)
+	@if(strlen($h['description']) > 3)
 	  </a>
 	@endif
 			
-	@if(strlen($h['f_desc1']) > 3)
+	@if(strlen($h['description']) > 3)
 	  <a href="/product/{{ $h['code'] }}">
 	@endif
 			
-	<strong>{{ $h['f_name'] }}</strong>
+	<strong>{{ $h['name'] }}</strong>
 		
-	@if(strlen($h['f_desc1']) > 3)
+	@if(strlen($h['description']) > 3)
 	  </a>
 	@endif
 	
@@ -270,13 +308,19 @@
 							  
 	{{ strtoupper($h['code']) }}<br />
 	Prix sugg&eacute;r&eacute;: ${{ $h['msrp'] }}
-	<div class="input-group" style="margin-left:auto;margin-right:auto;">
-	  {{ Form::open(array('url' => 'foo/bar')) }}
-	  {{ Form::label('qty', 'J\'en veux:') }}
-	  {{ Form::number('qty', 1, array('style' => 'color:#000;width:40px;padding-left:5px;', 'class' => 'img-rounded')) }}
-	  <input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:6px;" type="image">
-	  {{ Form::close() }}
-	</div>
+			<div class="input-group text-center">
+			{{ Form::open(array('url' => 'foo/bar')) }}
+
+				<input id="buy-{{ $h['code'] }}" type="text" class="form-control" name="buy-{{ $h['code'] }}" value="1" style="width:40px;">
+				<button type="submit" class="btn btn-success btn-sm" style="margin-top:10px;"><span class="glyphicon glyphicon-shopping-cart"></span> Acheter</button>
+				<script>
+					$("input[name='buy-{{ $h['code'] }}']").TouchSpin({
+						min: 1
+					});
+				</script>
+
+			{{ Form::close() }}
+			</div>
 	
 	<div class="visible-xs-block" style="height:30px;width:100%">&nbsp;</div>
 	
@@ -294,11 +338,17 @@
 
 		
 		
-				
+		
 		<h4 style="margin-top:40px;"><a data-toggle="collapse" href="#collapseExtensions" aria-expanded="true" aria-controls="collapseExtensions">Extensions</a></h4>
-		<hr style="border-color: #{{ $productline['fg_color'] }}">
+
+        @if(strlen($productline['fg_color']) > 2)
+          <hr style="border-color: #{{ $productline['fg_color'] }};" />
+        @else
+          <hr style="border-color: #cccccc;" />
+        @endif
 				
 		<div class="collapse in" id="collapseExtensions">
+		
 				
 		  <div class="row">
 			  
@@ -311,28 +361,28 @@
 		    @foreach($products as $p)
 					
 			  <div class="col-sm-4 text-center" style="padding:10px 8px;">
-			    @if(strlen($p['f_desc1']) > 3)
+			    @if(strlen($p['description']) > 3)
 				  <a href="/product/{{ $p['code'] }}">
 				@endif
 							
 				@if(File::exists('img/thumbs/'.strtolower($p['code']).'t.png'))
-				  {{ HTML::image('img/thumbs/'.strtolower($p['code']).'t.png', $p['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
+				  {{ HTML::image('img/thumbs/'.strtolower($p['code']).'t.png', $p['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
 				@elseif(File::exists('img/thumbs/'.strtolower($p['code']).'t.jpg'))
-				  {{ HTML::image('img/thumbs/'.strtolower($p['code']).'t.jpg', $p['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}				
+				  {{ HTML::image('img/thumbs/'.strtolower($p['code']).'t.jpg', $p['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}				
 				@elseif(File::exists('img/thumbs/'.strtolower($p['code']).'t.jpeg'))
-				  {{ HTML::image('img/thumbs/'.strtolower($p['code']).'t.jpeg', $p['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
+				  {{ HTML::image('img/thumbs/'.strtolower($p['code']).'t.jpeg', $p['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
 				@elseif(File::exists('img/thumbs/'.strtolower($p['code']).'t.gif'))
-				  {{ HTML::image('img/thumbs/'.strtolower($p['code']).'t.gif', $p['f_name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
+				  {{ HTML::image('img/thumbs/'.strtolower($p['code']).'t.gif', $p['name'], array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
 				@endif
 							
-				@if(strlen($p['f_desc1']) > 3)
+				@if(strlen($p['description']) > 3)
 				  </a>
 				@endif
 				<!-- lg extensions -->
 				<!-- md extensions -->
 				<div class="hidden-xs hidden-sm">			
 					<strong>
-					  {{ $p['f_name'] }}</strong><br />
+					  {{ $p['name'] }}</strong><br />
 					  @if($p['prod_lang'] == 'f')
 						&Eacute;dition fran&ccedil;aise<br/>
 					  @elseif($p['prod_lang'] == 'e')
@@ -343,19 +393,25 @@
 							  
 					  {{ strtoupper($p['code']) }}<br />
 					  Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}
-					<div class="input-group" style="margin-left:auto;margin-right:auto;">
-					  {{ Form::open(array('url' => 'foo/bar')) }}
-					  {{ Form::label('qty', 'J\'en veux:') }}
-					  {{ Form::number('qty', 1, array('style' => 'color:#000;width:40px;padding-left:5px;', 'class' => 'img-rounded')) }}
-					  <input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:6px;" type="image">
-					  {{ Form::close() }}
-					</div>
+			<div class="input-group" style="margin-left:auto;margin-right:auto;margin-top:5px;margin-bottom:10px;">
+			{{ Form::open(array('url' => 'foo/bar')) }}
+
+				<input id="buy-{{ $p['code'] }}" type="text" class="form-control" name="buy-{{ $p['code'] }}" value="1" style="width:40px;">
+				<button type="submit" class="btn btn-danger btn-sm" style="margin-top:10px;">R&eacute;server</button>
+				<script>
+					$("input[name='buy-{{ $p['code'] }}']").TouchSpin({
+						min: 1
+					});
+				</script>
+
+			{{ Form::close() }}
+			</div>
 				</div>
 				
 				<!-- sm extensions -->
 				<!-- xs extensions -->
 				<div class="visible-xs-block visible-sm-block" style="font-size:12px;">
-					<strong>{{ $p['f_name'] }}</strong><br />
+					<strong>{{ $p['name'] }}</strong><br />
 					  @if($p['prod_lang'] == 'f')
 						&Eacute;dition fran&ccedil;aise<br/>
 					  @elseif($p['prod_lang'] == 'e')
@@ -366,13 +422,19 @@
 							  
 					  {{ strtoupper($p['code']) }}<br />
 					  Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}
-					<div class="input-group" style="margin-left:auto;margin-right:auto;">
-					  {{ Form::open(array('url' => 'foo/bar')) }}
-					  {{ Form::label('qty', 'J\'en veux:') }}
-					  {{ Form::number('qty', 1, array('style' => 'color:#000;width:40px;padding-left:5px;', 'class' => 'img-rounded')) }}
-					  <input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:6px;" type="image">
-					  {{ Form::close() }}
-					</div>					
+			<div class="input-group text-center">
+			{{ Form::open(array('url' => 'foo/bar')) }}
+
+				<input id="buy-{{ $p['code'] }}" type="text" class="form-control" name="buy-{{ $p['code'] }}" value="1" style="width:40px;">
+				<button type="submit" class="btn btn-danger btn-sm" style="margin-top:10px;"><span class="glyphicon glyphicon-shopping-cart"></span> Acheter</button>
+				<script>
+					$("input[name='buy-{{ $p['code'] }}']").TouchSpin({
+						min: 1
+					});
+				</script>
+
+			{{ Form::close() }}
+			</div>					
 				</div>
 			  </div>
 			  <?php
@@ -381,7 +443,9 @@
 			  ?>
 			@endforeach
 		  </div>
+
 		</div>
+
 	  </div>		
 	</div>		
   </div>
