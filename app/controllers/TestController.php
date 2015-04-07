@@ -1,6 +1,8 @@
-<?php
+<?php namespace App\Controllers;
 
-class TestController extends BaseController {
+use \App\Controllers\BaseController;
+
+class TestController extends \BaseController {
 	
 	protected $layout = 'layouts.main';
 

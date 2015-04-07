@@ -20,8 +20,9 @@ class AccountController extends BaseController {
 		
 		if (Auth::attempt(array('username'=>Input::get('username'), 'password'=>Input::get('password')), $remember)) {
 			$user = Account::findOrFail(Auth::id());
-			$user->last_login = date("Y-m-d H:i:s");
-			$user->save();
+			$response = Event::fire('auth.login', array($user));
+			/*$user->last_login = date("Y-m-d H:i:s");
+			$user->save();*/
 			return Redirect::to('/account/dashboard');
 		} else {
 			return Redirect::to('/account/login')

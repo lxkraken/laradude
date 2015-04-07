@@ -12,7 +12,7 @@ class Breadcrumbs {
 	{
 	
 		$this->pathElements = explode('/', Request::path());
-		$this->catlang = Session::get('catlang', 'f');
+		$this->catlang = Session::get('section', 'f');
 		$this->isAdmin = (Auth::check() && Auth::user()->rank > 1) ? TRUE : FALSE;
 
 	}

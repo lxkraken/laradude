@@ -3,12 +3,22 @@
 class NavBar {
 	
 	protected $data;
+	protected $account;
+	
+	public function __construct(Account $account)
+	{
+		$this->account = $account;
+
+		
+	}
 	
 	public function generateUserQuantities()
 	{
+		$basket = new Basket($this->account);
+		$preorder = new Preorder($this->account);
 		
-		$this->data['basket'] = $this->getBasket();
-		$this->data['reserve'] = $this->getReserve();
+		$this->data['basket'] = $basket->getSubtotal();
+		$this->data['reserve'] = $preorder->getNumberOfItems();
 		
 		$this->getUsername();
 		
@@ -18,8 +28,9 @@ class NavBar {
 	
 	public function generateAdminQuantities()
 	{
+		$basket = new Basket($this->account);
 		
-		$this->data['titetete'] = $this->getTiteTete();
+		$this->data['titetete'] = $basket->getNumberOfItems();
 		
 		$this->getUsername();
 		
@@ -32,25 +43,8 @@ class NavBar {
 	private function getUsername()
 	{
 		$this->data['linkUrl'] = '/account/dashboard';
-		$this->data['linkText'] = 'Salut '.Auth::user()->username.'!';
+		$this->data['linkText'] = 'Salut '.$this->account->username.'!';
 		
-	}
-	
-	private function getBasket()
-	{
-		return 46;
-	}
-	
-	private function getReserve()
-	{
-		return 94;
-		
-	}
-	
-	private function getTiteTete()
-	{
-		
-		return 55;
 	}
 
 }

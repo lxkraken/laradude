@@ -1,0 +1,46 @@
+<?php
+
+class AjaxController extends BaseController {
+ 
+    /**
+     * show a view with form to create settings
+     */
+    public function index() {
+        return View::make( 'catalogue.test' );
+    }
+ 
+    /**
+     * handle data posted by ajax request
+     */
+    public function insert() {
+        //check if its our form
+        if ( Session::token() !== Input::get( '_token' ) ) {
+            return Response::json( array(
+                'msg' => 'Unauthorized attempt to create setting'
+            ) );
+        }
+ 
+        $action = Input::get( 'action' );
+        $code = Input::get( 'code' );
+        $qty = Input::get( $action.'-'.$code );
+        
+        $str = $action.'~'.$code.'~'.$qty;
+        
+        DB::table('ajax')
+			->insert(['data' => $str ]);
+ 
+        //.....
+        //validate data
+        //and then store it in DB
+        //.....
+ 
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Stored!',
+        );
+ 
+        return Response::json( $response );
+    }
+ 
+//end of class
+}

@@ -4,11 +4,21 @@ class SearchController extends BaseController {
 
 	protected $layout = 'layouts.main';
 	protected $data;
-	protected $isAdmin;
+	protected $rank;
+	protected $account = null;
 	
 	public function __construct() {
 		
-		$this->isAdmin = (Auth::check() && Auth::user()->rank > 1) ? TRUE : FALSE;
+		if(Auth::check())
+		{
+			$this->account = Auth::user();
+			$this->rank = $this->account->rank;
+		}
+		else
+		{
+			$this->account = null;
+			$this->rank = 0;
+		}
 	}
 
 	public function getIndex()
@@ -16,7 +26,7 @@ class SearchController extends BaseController {
 		
 		if(Input::has('q'))
 		{
-			$s = new Search(Input::get('q'), $this->isAdmin);
+			$s = new Search(Input::get('q'), $this->rank);
 			
 			$codes = $s->getSearchResults();
 			
@@ -25,10 +35,15 @@ class SearchController extends BaseController {
 				
 				foreach($codes as $code => $score)
 				{
-					$product = Product::findOrFail($code);
-					$product->score = $score;
 					
-					$this->data['products'][] = $product;
+					$product = Product::findOrFail($code);
+					$pp = new ProductPresenter($product, $this->account);
+					
+					$pArray = $pp->getProduct();
+					
+					$pArray['score'] = $score;
+					
+					$this->data['products'][] = $pArray;
 
 				}
 			}

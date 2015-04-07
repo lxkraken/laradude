@@ -27,7 +27,7 @@ class ManufacturerController extends BaseController {
 	{
 		if($this->isAdmin)
 		{
-			$pldIds = DB::table('products')
+			$plIds = DB::table('products')
 							->where('products.man_id', '=', $id)
 							->select('products.pl_id')
 							->distinct()

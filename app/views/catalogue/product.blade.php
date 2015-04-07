@@ -1,3 +1,6 @@
+@include('components.ajax')
+
+
 <div class="container center-block" style="margin-bottom:100px;">
 	
 <!-- Start Breadcrumb -->	
@@ -21,175 +24,171 @@
 		
 	<div class="img-rounded" style="padding-bottom:10px;
 	
-	@if(strlen($productline['bg_url']) > 2)
-		padding-top:40px;background-image:url({{ asset('../img/backgrounds/'.$productline['bg_url']) }});background-repeat:no-repeat;background-size:contain;
+	@if(strlen($pl['bg_url']) > 2)
+		padding-top:40px;background-image:url({{ asset('../img/backgrounds/'.$pl['bg_url']) }});background-repeat:no-repeat;background-size:contain;
 	@endif
 	
-	@if(strlen($productline['fg_color']) > 2)
-		color:#{{ $productline['fg_color'] }};
+	@if(strlen($pl['fg_color']) > 2)
+		color:#{{ $pl['fg_color'] }};
 	@endif
 	
-	@if(strlen($productline['bg_color']) > 2)
-		background-color:#{{ $productline['bg_color'] }};
+	@if(strlen($pl['bg_color']) > 2)
+		background-color:#{{ $pl['bg_color'] }};
 	@endif
 	">
 	
 	  <div class="img-rounded center-block" style="
 	  
-	  @if($productline['transp_bg'] == 'true')
+	  @if($pl['transp_bg'] == 'true')
 		background-image:url({{ asset ('../img/transpDot.png') }});background-repeat: repeat;
 	  @endif
 	  
 	  padding:10px;width:97%;">
 			
 				<!-- xs -->
-				<h1 class="visible-xs-block" style="font-size:24px;">{{ $productline['name'] }}</h1>
+				<h1 class="visible-xs-block" style="font-size:24px;">{{ $pl['name'] }}</h1>
 						
 				<!-- sm -->
-				<h1 class="visible-sm-block" style="font-size:30px;">{{ $productline['name'] }}</h1>
+				<h1 class="visible-sm-block" style="font-size:30px;">{{ $pl['name'] }}</h1>
 
-				<h1 class="visible-lg-block visible-md-block" style="font-size:36px;">{{ $productline['name'] }}</h1>
+				<h1 class="visible-lg-block visible-md-block" style="font-size:36px;">{{ $pl['name'] }}</h1>
 						
-        @if(strlen($productline['fg_color']) > 2)
-          <hr style="border-color: #{{ $productline['fg_color'] }};" />
+        @if(strlen($pl['fg_color']) > 2)
+          <hr style="border-color: #{{ $pl['fg_color'] }};" />
         @else
           <hr style="border-color: #cccccc;" />
         @endif
 			
 			<div class="row hidden-xs">
 			  <div class="col-sm-6">
-				@if(File::exists('img/covers/'.strtolower($product['code']).'c.png'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.png', $product['name'], array('class' => 'img-responsive pull-right')) }}
-				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.jpg'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpg', $product['name'], array('class' => 'img-responsive pull-right')) }}				
-				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.jpeg'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpeg', $product['name'], array('class' => 'img-responsive pull-right')) }}
-				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.gif'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.gif', $product['name'], array('class' => 'img-responsive pull-right')) }}
-				@endif
+
+			  @include('components.productimage', ['code' => $p['code'], 'name' => $p['name'], 'size' => 'c', 'class' => 'img-responsive pull-right', 'style' => '', 'linked' => 'false'])
+
+
 			  </div>
 			  <div class="col-sm-6">
-			    <h4>{{ $product['name'] }}</h4>
+			    <h4>{{ $p['name'] }}</h4>
 			    
-				<p>{{ strtoupper($product['code']) }}
+				<p>{{ strtoupper($p['code']) }}
 				
-				 @if($product['prod_lang'] == 'f')
+				 @if($p['prod_lang'] == 'f')
 				   &nbsp;-&nbsp;&Eacute;dition fran&ccedil;aise<br/>
-				 @elseif($product['prod_lang'] == 'e')
+				 @elseif($p['prod_lang'] == 'e')
 				    &nbsp;-&nbsp;&Eacute;dition anglaise<br/>
-				 @elseif($product['prod_lang'] == 'm')
+				 @elseif($p['prod_lang'] == 'm')
 				    &nbsp;-&nbsp;&Eacute;dition multilingue<br/>
 				 @endif
 						  
-				 Prix sugg&eacute;r&eacute;: ${{ $product['msrp'] }}
+				 Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}
 				</p>
 				<p>
-			    @if(strlen($product['players']) > 0)
-				  Nombre de joueurs: {{ $product['players'] }}<br/>
+			    @if(strlen($p['players']) > 0)
+				  Nombre de joueurs: {{ $p['players'] }}<br/>
 				@endif
 						  
-				@if(strlen($product['age']) > 0)
-				  &Agrave;ges: {{ $product['age'] }}<br/>
+				@if(strlen($p['age']) > 0)
+				  &Agrave;ges: {{ $p['age'] }}<br/>
 				@endif
 						  
-				@if(strlen($product['case_qty']) > 0 && $product['case_qty'] > 0)
-				  Caisse compl&egrave;te: {{ $product['case_qty'] }}<br/>
+				@if(strlen($p['case_qty']) > 0 && $p['case_qty'] > 0)
+				  Caisse compl&egrave;te: {{ $p['case_qty'] }}<br/>
 				@endif
 						  
-				@if(strlen($product['upc']) > 0)
-				  UPC: {{ $product['upc'] }}<br/>
+				@if(strlen($p['upc']) > 0)
+				  UPC: {{ $p['upc'] }}<br/>
 				@endif
 				
-				@if($product['prod_type'] == 1)
+				@if($p['prod_type'] == 1)
 					Mat&eacute;riel de base<br/>
-				@elseif($product['prod_type'] == 2)
+				@elseif($p['prod_type'] == 2)
 					Accessoire / Suppl&eacute;ment<br/>
 				@endif
 				
 				</p>
-				<div class="input-group text-center">
-				  
-				  {{ Form::open(array('url' => 'foo/bar')) }}
+				
+				
+				@if(Auth::check())
+					<div class="input-group text-center">
+					  
+					@if(Auth::user()->rank > 1)
+						@include('components.basket', ['product' => $p, 'verb' => 'tt'])
+					@else
+						@if($p['stock'] - $p['reserved'] > 0)
+							@include('components.basket', ['product' => $p, 'verb' => 'buy'])
+						@else
+							@include('components.basket', ['product' => $p, 'verb' => 'reserve'])
+						@endif
+					@endif
 
-						<input id="buy-{{ $product['code'] }}" type="text" class="form-control" name="buy-{{ $product['code'] }}" value="1" style="width:40px;">
-						<!-- input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:6px;" type="image" -->
-						    <button type="submit" class="btn btn-success btn-sm" style="margin-top:20px;"><span class="glyphicon glyphicon-shopping-cart"></span> Acheter</button>
-					<script>
-						$("input[name='buy-{{ $product['code'] }}']").TouchSpin({
-							min: 1
-							});
-					</script>
-
-					{{ Form::close() }}
-				</div>
+					</div>
+				@endif
 	  
 			  </div>
 			</div>
 			
 			<div class="row visible-xs-block">
 			  <div class="col-xs-12">
-				@if(File::exists('img/covers/'.strtolower($product['code']).'c.png'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.png', $product['name'], array('class' => 'img-responsive pull-right')) }}
-				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.jpg'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpg', $product['name'], array('class' => 'img-responsive pull-right')) }}				
-				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.jpeg'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.jpeg', $product['name'], array('class' => 'img-responsive pull-right')) }}
-				@elseif(File::exists('img/covers/'.strtolower($product['code']).'c.gif'))
-				  {{ HTML::image('img/covers/'.strtolower($product['code']).'c.gif', $product['name'], array('class' => 'img-responsive pull-right')) }}
-				@endif
+				@include('components.productimage', ['code' => $p['code'], 'name' => $p['name'], 'size' => 'c', 'class' => 'img-responsive pull-right', 'style' => '', 'linked' => 'false'])
 			  </div>
 			  <div class="col-xs-12 text-center">
-			    <h4>{{ $product['name'] }}</h4>
+			    <h4>{{ $p['name'] }}</h4>
 			    
-				<p>{{ strtoupper($product['code']) }}
+				<p>{{ strtoupper($p['code']) }}
 				
-				 @if($product['prod_lang'] == 'f')
+				 @if($p['prod_lang'] == 'f')
 				   &nbsp;-&nbsp;&Eacute;dition fran&ccedil;aise<br/>
-				 @elseif($product['prod_lang'] == 'e')
+				 @elseif($p['prod_lang'] == 'e')
 				    &nbsp;-&nbsp;&Eacute;dition anglaise<br/>
-				 @elseif($product['prod_lang'] == 'm')
+				 @elseif($p['prod_lang'] == 'm')
 				    &nbsp;-&nbsp;&Eacute;dition multilingue<br/>
 				 @endif
 						  
-				 Prix sugg&eacute;r&eacute;: ${{ $product['msrp'] }}<br />
+				 Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}<br />
 
-			    @if(strlen($product['players']) > 0)
-				  Nombre de joueurs: {{ $product['players'] }}<br/>
+			    @if(strlen($p['players']) > 0)
+				  Nombre de joueurs: {{ $p['players'] }}<br/>
 				@endif
 						  
-				@if(strlen($product['age']) > 0)
-				  &Agrave;ges: {{ $product['age'] }}<br/>
+				@if(strlen($p['age']) > 0)
+				  &Agrave;ges: {{ $p['age'] }}<br/>
 				@endif
 						  
-				@if(strlen($product['case_qty']) > 0 && $product['case_qty'] > 0)
-				  Caisse compl&egrave;te: {{ $product['case_qty'] }}<br/>
+				@if(strlen($p['case_qty']) > 0 && $p['case_qty'] > 0)
+				  Caisse compl&egrave;te: {{ $p['case_qty'] }}<br/>
 				@endif
 						  
-				@if(strlen($product['upc']) > 0)
-				  UPC: {{ $product['upc'] }}<br/>
+				@if(strlen($p['upc']) > 0)
+				  UPC: {{ $p['upc'] }}<br/>
 				@endif
 				
-				@if($product['prod_type'] == 1)
+				@if($p['prod_type'] == 1)
 					Mat&eacute;riel de base<br/>
-				@elseif($product['prod_type'] == 2)
+				@elseif($p['prod_type'] == 2)
 					Accessoire / Suppl&eacute;ment<br/>
 				@endif
 				
 				</p>
+				@if(Auth::check())
 				<div class="input-group" style="margin-left:auto;margin-right:auto;">
-				  
-				  {{ Form::open(array('url' => 'foo/bar')) }}
-				  {{ Form::label('qty', 'J\'en veux:') }}
-				  {{ Form::number('qty', 1, array('style' => 'color:#000;width:40px;padding-left:5px;', 'class' => 'img-rounded')) }}
-				  <input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:4px;" type="image">
-					{{ Form::close() }}
+					
+					@if(Auth::user()->rank > 1)
+						@include('components.basket', ['product' => $p, 'verb' => 'tt'])
+					@else
+						@if($p['stock'] - $p['reserved'] > 0)
+							@include('components.basket', ['product' => $p, 'verb' => 'buy'])
+						@else
+							@include('components.basket', ['product' => $p, 'verb' => 'reserve'])
+						@endif
+					@endif
+				
+
 				</div>
-	  
+				@endif 
 			  </div>
 			</div>
 			
 			
-			<p style="margin-top:40px;">{{ $product['description'] }}</p>
+			<p style="margin-top:40px;">{{ $p['description'] }}</p>
 
 		</div>
 	  </div>

@@ -1,0 +1,42 @@
+<?php
+
+class SettingsController extends BaseController {
+ 
+    /**
+     * show a view with form to create settings
+     */
+    public function add() {
+        return View::make( 'catalogue.test' );
+    }
+ 
+    /**
+     * handle data posted by ajax request
+     */
+    public function create() {
+        //check if its our form
+        if ( Session::token() !== Input::get( '_token' ) ) {
+            return Response::json( array(
+                'msg' => 'Unauthorized attempt to create setting'
+            ) );
+        }
+ 
+        $setting_name = Input::get( 'setting_name' );
+        $setting_value = Input::get( 'setting_value' );
+ 
+        //.....
+        //validate data
+        //and then store it in DB
+        //.....
+		
+		DB::table('ajax')->insert([ 'data' => $setting_name.'~'.$setting_value]);
+		
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Woah Yeah!!!',
+        );
+ 
+        return Response::json( $response );
+    }
+ 
+//end of class
+}

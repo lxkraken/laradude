@@ -12,11 +12,13 @@ View::composer('layouts.main', function($view)
 	// Logout
 	//Auth::logout();
 	
-	$nb = new NavBar();
-	
 	if(Auth::check())
 	{
-		if(Auth::user()->rank > 1)
+		$account = Account::findOrFail(Auth::id());
+		
+		$nb = new NavBar($account);
+		
+		if($account->rank > 1)
 		{
 			
 			$nav = $nb->generateAdminQuantities();
@@ -27,6 +29,12 @@ View::composer('layouts.main', function($view)
 			
 			$nav = $nb->generateUserQuantities();
 		}
+		
+		// Update the last_activity timestamp
+		
+		$account->last_activity = new DateTime;
+		$account->save();
+		
 	}
 	else
 	{
@@ -34,8 +42,7 @@ View::composer('layouts.main', function($view)
 		$nav['linkUrl'] = '/account/login';
 		
 	}
-
-
+	
 	$view->with('nav', $nav);
 	
 });

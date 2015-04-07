@@ -1,10 +1,18 @@
+@include('components.ajax')
+
 <div class="container center-block" style="margin-bottom:100px;">
 	
 	<div class="row">
 		
 		@if(isset($products))
 		
-			<h2>R&eacute;sultats pour la recherche "{{ Input::get('q') }}"</h2>
+			<h2>R&eacute;sultats pour la recherche "
+			@if(strlen(Input::get('q')) > 20)
+				{{ substr(Input::get('q'), 0, 30) }}...
+			@else
+				{{ Input::get('q') }}
+			@endif
+			"</h2>
 			<hr style="border-color: #000;">
 			
 		  <?php
@@ -15,35 +23,28 @@
 		
 			@foreach($products as $p)
 			
-				<div class="col-sm-3" style="text-align:center;margin-bottom:40px;">
+				<div class="col-sm-3" style="text-align:center;margin-bottom:40px;max-height:500px;">
+					
+				@include('components.productimage', ['code' => $p['code'], 'name' => $p['name'], 'size' => 'c', 'class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;max-height:200px;', 'linked' => 'true'])
 
-				@if(File::exists('img/covers/'.strtolower($p->code).'c.png'))
-				  {{ HTML::image('img/covers/'.strtolower($p->code).'c.png', $p->f_name, array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
-				@elseif(File::exists('img/covers/'.strtolower($p->code).'c.jpg'))
-				  {{ HTML::image('img/covers/'.strtolower($p->code).'c.jpg', $p->f_name, array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}				
-				@elseif(File::exists('img/covers/'.strtolower($p->code).'c.jpeg'))
-				  {{ HTML::image('img/covers/'.strtolower($p->code).'c.jpeg', $p->f_name, array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
-				@elseif(File::exists('img/covers/'.strtolower($p->code).'c.gif'))
-				  {{ HTML::image('img/covers/'.strtolower($p->code).'c.gif', $p->f_name, array('class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;')) }}
-				@endif
-				  <p><span style="font-weight:bold;">{{ $p->f_name }}</span><br />{{ $p->code }}<br />Prix sugg&eacute;r&eacute;: ${{ $p->msrp }}</p>
-				  
+			  <p><span style="font-weight:bold;">{{ $p['name'] }}</span><br />{{ $p['code'] }}<br />Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}</p>
+			
+			@if(Auth::check())
 			<div class="input-group text-center" style="margin-left:auto;margin-right:auto;">
-			{{ Form::open(array('url' => 'foo/bar')) }}
-
-				<input id="buy-{{ $p->code }}" type="text" class="form-control" name="buy-{{ $p->code }}" value="1" style="width:40px;">
-				<button type="submit" class="btn btn-success btn-sm" style="margin-top:10px;"><span class="glyphicon glyphicon-shopping-cart"></span> Acheter</button>
-				<script>
-					$("input[name='buy-{{ $p->code }}']").TouchSpin({
-						min: 1
-					});
-				</script>
-
-			{{ Form::close() }}
+			  @if(Auth::user()->rank > 1)
+				@include('components.basket', ['product' => $p, 'verb' => 'tt'])
+			  @else
+				@if($p['stock'] - $p['reserved'] > 0)
+				  @include('components.basket', ['product' => $p, 'verb' => 'buy'])
+				@else
+				  @include('components.basket', ['product' => $p, 'verb' => 'reserve'])
+				@endif
+			  @endif
 			</div>
+			@endif
 				</div>
 			  <?php
-				if($x % 4 == 0) echo '</div><div class="row">';
+				if($x % 4 == 0) echo '</div><hr style="border-color:#ccc;" /><div class="row">';
 				$x++;
 			  ?>
 				

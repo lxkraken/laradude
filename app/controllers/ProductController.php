@@ -3,12 +3,24 @@
 class ProductController extends BaseController {
 
 	protected $layout = 'layouts.main';
-	protected $isAdmin;
+	protected $rank;
 	protected $data;
+	protected $account;
+
 	
 	public function __construct() {
 		
-		$this->isAdmin = (Auth::check() && Auth::user()->rank > 1) ? TRUE : FALSE;
+		if(Auth::check())
+		{
+			$this->account = Account::findOrFail(Auth::id());
+			$this->rank = $this->account->rank;
+		}
+		else
+		{
+			$this->rank = 0;
+			$this->account = null;
+		}
+
 	}
 
 	public function index() {
@@ -18,43 +30,34 @@ class ProductController extends BaseController {
 	
 	public function show($id) {
 		
-		$product = Product::findOrFail(strtoupper($id));
+		//$pp = ($this->account) ? new ProductPresenter(Product::findOrFail(strtoupper($id)), $this->account) : new ProductPresenter(Product::findOrFail(strtoupper($id)));
 		
-		$this->data['product'] = $product->toArray();
-		
-		switch($this->data['product']['prod_lang'])
-		{
-			case 'dice':
-			case 'e':
-			case 'f':
-				Session::put('catlang', $this->data['product']['prod_lang']);
-				break;
-			
-			case 'b':
-			case 'm':
-				Session::put('catlang', 'f');
-				break;
-		}
-		
-		$this->data['product']['description'] = (strlen($product['f_desc1']) < 1)  ? stripslashes($product['e_desc1']).stripslashes($product['e_desc2']) : stripslashes($product['f_desc1']).stripslashes($product['f_desc2']);
-		
-		$this->data['product']['name'] = (strlen($product['f_name']) < 1)  ? stripslashes($product['e_name']) : stripslashes($product['f_name']);
+		$pp = new ProductPresenter(Product::findOrFail(strtoupper($id)), $this->account);
 
-		$productline = Productline::findOrFail($product->pl_id);
+		$product = $pp->getProduct();
 		
-		$this->data['productline'] = $productline->toArray();
+		if($product['display'] == 'true' || $this->rank > 1)
+		{
+			$ss = new CatalogueSectionSetter;
+			
+			$ss->setSectionByProduct($product['prod_lang']);
+			
+			$plp = new ProductlinePresenter(Productline::findOrFail($product['pl_id']));
 		
-		$p = (strlen($this->data['productline']['f_name']) < 1)  ? stripslashes($this->data['productline']['e_name']) : stripslashes($this->data['productline']['f_name']);
-		
-		$pBits = explode('~', $p);
-		
-		$this->data['productline']['name'] = trim($pBits[0]);
-		
-		// Holy fuck it works!!!
-		$bc = new Breadcrumbs();
-		$this->data['breadcrumbs'] = $bc->getBreadcrumbs();
-		
-		$this->layout->content = View::make('catalogue.product', $this->data);
+			$this->data['pl'] = $plp->getProductline();
+			
+			$this->data['p'] = $product;
+			
+			// Holy fuck it works!!!
+			$bc = new Breadcrumbs();
+			$this->data['breadcrumbs'] = $bc->getBreadcrumbs();
+			
+			$this->layout->content = View::make('catalogue.product', $this->data);
+		}
+		else
+		{
+			return Redirect::to('/');
+		}
 	}
 	
 }

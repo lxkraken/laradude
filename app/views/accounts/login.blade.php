@@ -1,3 +1,8 @@
+<script type="text/javascript">
+$( document ).ready(function() {
+  $( "#username" ).focus();
+});
+</script>
 <div class="container-fluid">
 	<div class="form">
 		<div class="form-group center-block" style="max-width:500px;">

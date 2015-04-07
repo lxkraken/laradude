@@ -8,20 +8,15 @@ class Search {
 	private $score = array();
 	/*private $lang;*/
 	protected $searchQuery;
-	protected $isAdmin;
+	protected $rank;
 
 
 //////////////////////////////////////////////////////////////////
 //constructor
 /////////////////////////////////////////////////////////////////
-	public function __construct($searchQuery, $isAdmin = false) {
+	public function __construct($searchQuery, $rank = 0) {
 		
-		/*$this->lang = $lang;
-		$this->rank = $rank;*/
-		
-		//$this->isAdmin = (Auth::check() && Auth::account()->rank > 1) ? true : false;
-		
-		$this->isAdmin = $isAdmin;
+		$this->rank = $rank;
 		
 		$searchQuery = str_replace('\'', '', $searchQuery);
 		$searchQuery = str_replace(';', '', $searchQuery);
@@ -40,14 +35,13 @@ class Search {
 	public function __destruct(){
 		unset($this->score);
 		unset($this->searchTerms);
-		unset($this->lang);
 	}
 //////////////////////////////////////////////////////////////////
 //public fuctions
 
 	public function getSearchResults() {
 		
-		if(!$this->isAdmin) $queryAdd = ' AND display = TRUE';
+		if($this->rank < 2) $queryAdd = ' AND display = TRUE';
         
        
         $baseScore = count($this->searchTerms);
@@ -76,12 +70,12 @@ class Search {
          * Order by base game, popularity.
         *****/
         
-        $this->doSearch(' WHERE f_name ~* ? AND prod_type = 1', $this->francoSearch($this->searchQuery), 2 + $baseScore);
-        $this->doSearch(' WHERE e_name ~* ? AND prod_type = 1', $this->searchQuery, 2 + $baseScore);
+        $this->doSearch(' WHERE f_name ~* ? AND prod_type = 1', $this->francoSearch($this->searchQuery), 5 + $baseScore);
+        $this->doSearch(' WHERE e_name ~* ? AND prod_type = 1', $this->searchQuery, 5 + $baseScore);
 
 
-        $this->doSearch(' WHERE f_name ~* ?', $this->francoSearch($this->searchQuery), 1 + $baseScore);
-        $this->doSearch(' WHERE e_name ~* ?', $this->searchQuery, 1 + $baseScore);
+        $this->doSearch(' WHERE f_name ~* ?', $this->francoSearch($this->searchQuery), 5 + $baseScore);
+        $this->doSearch(' WHERE e_name ~* ?', $this->searchQuery, 5 + $baseScore);
 
 		if(count($this->searchTerms) > 1) {
 
@@ -148,7 +142,7 @@ class Search {
 		
 		//if(!$pgconn) require('config/pgdb.inc');
 		
-		if(!$this->isAdmin) $queryAdd = ' AND display = TRUE';
+		if($this->rank < 2) $queryAdd = ' AND display = TRUE';
 		
 		//$query = 'SELECT code FROM products'.$where.' '.$queryAdd.' AND code NOT ILIKE \'%D\' AND available < 5 ORDER BY code ASC;';
 		

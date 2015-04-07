@@ -25,6 +25,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script type="text/javascript" src="http://distributiondude.ca/js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="http://distributiondude.ca/js/jquery.color-2.1.2.min.js"></script>
 	<script src="http://distributiondude.ca/bootstrap-touchspin-master/bootstrap-touchspin/bootstrap.touchspin.js"></script>   
   </head>
   

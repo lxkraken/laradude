@@ -9,6 +9,7 @@ class Product extends Eloquent {
 	 */
 	protected $table = 'products';
 	protected $primaryKey = 'code';
+
 	
 	/*public function scopeJoinManufacturers($query, $manId)
 	{

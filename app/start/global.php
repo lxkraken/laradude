@@ -18,7 +18,8 @@ ClassLoader::addDirectories(array(
 	app_path().'/controllers',
 	app_path().'/models',
 	app_path().'/database/seeds',
-	app_path().'/library'
+	app_path().'/library',
+        app_path().'/presenters'
 
 ));
 
@@ -96,3 +97,12 @@ require app_path().'/filters.php';
  */
 
 require app_path().'/composers.php';
+
+
+/*
+ * ------------------------------------------------------------------------
+ * Events
+ * ------------------------------------------------------------------------
+ */
+
+require app_path().'/events.php';

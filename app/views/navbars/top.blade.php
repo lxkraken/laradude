@@ -70,15 +70,15 @@
 
                 <ul class="nav navbar-nav navbar-right">
 			@if(isset($nav['basket']))
-                 <li><a href="#">Panier <span class="badge">${{ number_format($nav['basket'], 2) }}</span></a></li>
+                 <li><a href="/basket">Panier <span id="animbuy" class="badge">${{ number_format($nav['basket'], 2) }}</span></a></li>
             @endif
             
             @if(isset($nav['reserve']))
-				 <li><a href="#">R&eacute;serve <span class="badge">{{ $nav['reserve'] }}</span></a></li>
+				 <li><a href="/preorder">R&eacute;serve <span id="animreserve" class="badge">{{ $nav['reserve'] }}</span></a></li>
 			@endif
 			
 			@if(isset($nav['titetete']))
-				<li><a href="#">Truc dans ma p'tite t&ecirc;te <span class="badge">{{ $nav['titetete'] }}</span></a></li>
+				<li><a href="#">Truc dans ma p'tite t&ecirc;te <span id="animtt" class="badge">{{ $nav['titetete'] }}</span></a></li>
 			@endif
 			
 			<li><a href="{{ $nav['linkUrl'] }}" style="color:#fff;">{{ $nav['linkText'] }}</a></li>
@@ -160,8 +160,8 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-               <li><a href="#">Panier <span class="badge">$42.00</span></a></li>
-               <li><a href="#">R&eacute;serve <span class="badge">42</span></a></li>
+               <li><a href="/basket">Panier <span class="badge">$42.00</span></a></li>
+               <li><a href="/preorder">R&eacute;serve <span class="badge">42</span></a></li>
                <li><a href="/account/login">Connexion</a></li>
             </ul>
           </div>
@@ -231,8 +231,8 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-               <li><a href="#">Panier <span class="badge">$42.00</span></a></li>
-               <li><a href="#">R&eacute;serve <span class="badge">42</span></a></li>
+               <li><a href="/basket">Panier <span class="badge">$42.00</span></a></li>
+               <li><a href="/preorder">R&eacute;serve <span class="badge">42</span></a></li>
                <li><a href="/account/login">Connexion</a></li>
             </ul>
           </div>

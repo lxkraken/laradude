@@ -40,3 +40,8 @@ a:active {color:#000;text-decoration:none;}  /* selected link */
 .darkLink a:visited {color:#0000;text-decoration:none;}  /* visited link */
 .darkLink a:hover {color:#000;text-decoration:underline;}  /* mouse over link */
 .darkLink a:active {color:#000;text-decoration:none;}  /* selected link */
+
+.remove-item a:link {color:#000;text-decoration:none;}      /* unvisited link */
+.remove-item a:visited {color:#000;text-decoration:none;}  /* visited link */
+.remove-item a:hover {color:#C30A0A;text-decoration:none;}  /* mouse over link */
+.remove-item a:active {color:#000;text-decoration:none;}  /* selected link */

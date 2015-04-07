@@ -51,36 +51,120 @@ Route::get('catalogue/{lang?}', 'CatalogueController@getIndex');
 	
 });*/
 
-Route::get('test', function()
+Route::get('sandbox', function()
 {
-$hash1 = Hash::make('1234'); // A hash is generated
-$hash2 = Hash::make('1234'); // Another hash is generated that differs from the first one
-
-var_dump(Hash::check('1234', $hash1) && Hash::check('1234', $hash2));
-
-$user = Account::where('email', '=', 'alex@distributiondude.com')->firstOrFail();
-
-/*$pass = Hash::make('kr4K3n');
-
-$user->password = $pass;
-
-$user->save();*/
-
-echo '<br /><br />';
-
-var_dump(Hash::check('sherbet', $user->password));
-
-
-echo '<br />'.$user->password.'<br />';
-
-
-var_dump($user);
+	return View::make('jssandbox');
 
 });
 
+Route::get('baskettest', function()
+{
+	$account = Account::findOrFail('I5CgVjhBn2RRV1Ir');
+	
+	$product = Product::findOrFail('BBEPF10');
+						 
+	$preorder = new Preorder($account);
+	$preorder->updateItem($product, $qty);
+	
+	//$product = Product::findOrFail('BBEPF11');
+	
+	
+		
+
+	
+	echo '<br /><br />'.$preorder->getNumberOfItems().'<br /><br />'.$preorder->inPreorder($product);
+	
+	/*$account = DB::table('accounts')
+				->where('account_id', '=', 'VZg8N2d1Q3UUf1py')
+				->get();*/
+	
+	//$account = Account::find('VZg8N2d1Q3UUf1py');
+
+	/*$oh = new OrderHelper;
+	
+	$order = Order::Accountid($account->account_id)->notsubmitted()->notsent()->first();
+	
+	$items = $oh->getItems($order);
+	
+	$noi = $oh->getNumberOfItems($order);
+	
+	$product = Product::findOrFail('UBIMU01');
+	
+	$oh->updateItem($product, 5, 0, $order);*/
+	
+	//$basket = new Basket($account);
+	
+	//$items = $basket->getItems();
+	
+	//$product = Product::findOrFail('UBIMU01');
+	
+	//$basket->updateItem($product, 5);
+	
+	
+	
+	//var_dump($items);
+
+	/*foreach($items as $i)
+	{
+		echo $i->code.' '.$i->qty.'<br />';
+	}*/
+	
+	//echo '<br /><br />A total of $'.$basket->getSubtotal();
+	/*$o = $order->getBasket();
+	
+	echo $account->account_id;*/
+	
+	/*$queries = DB::getQueryLog();
+	$result = end($queries);
+	
+	var_dump($result);*/
+	
+
+	
+	//$order = Order::Accountid($account->account_id);
+	
+	//echo 'ordered_items_'.substr($o->order_id, 0, 6);
+	
+	/*foreach($order as $o)
+	{
+		echo $o->order_id;
+	}*/
+	
+	//echo '<br /><br />'.$b->order_id;
+	
+});
+//Settings: show form to create settings
+//Settings: show form to create settings
+
+
+//Settings: show form to create settings
+/*Route::get( '/basket', array(
+    'as' => 'basket.index',
+    'uses' => 'BasketController@index'
+) );*/
+ 
+//Settings: create a new setting
+Route::post( '/basket', array(
+    'as' => 'basket.update',
+    'uses' => 'BasketController@update'
+) );
+
+
+Route::post( '/ajax', array(
+    'as' => 'ajax.update',
+    'uses' => 'AjaxController@update'
+) );
+
+Route::controller('basket', 'BasketController');
+
+
 Route::controller('account', 'AccountController');
 
-//Route::controller('test', 'TestController');
+Route::controller('order', 'OrderController');
+
+Route::controller('preorder', 'PreorderController');
+
+//Route::controller('test', '\App\Controllers\TestController');
 
 //Route::get('search/{q?}', 'SearchController@getIndex');
 
