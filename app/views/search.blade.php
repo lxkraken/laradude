@@ -6,7 +6,7 @@
 		
 		@if(isset($products))
 		
-			<h2>R&eacute;sultats pour la recherche "
+			<h2>{{ Lang::get('search.resultsfor') }} "
 			@if(strlen(Input::get('q')) > 20)
 				{{ substr(Input::get('q'), 0, 30) }}...
 			@else
@@ -27,7 +27,7 @@
 					
 				@include('components.productimage', ['code' => $p['code'], 'name' => $p['name'], 'size' => 'c', 'class' => 'img-responsive', 'style' => 'margin-left:auto;margin-right:auto;max-height:200px;', 'linked' => 'true'])
 
-			  <p><span style="font-weight:bold;">{{ $p['name'] }}</span><br />{{ $p['code'] }}<br />Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}</p>
+			  <p><span style="font-weight:bold;">{{ $p['name'] }}</span><br />{{ $p['code'] }}<br />{{ Lang::get('catalogue.msrp') }}: ${{ $p['msrp'] }}</p>
 			
 			@if(Auth::check())
 			<div class="input-group text-center" style="margin-left:auto;margin-right:auto;">
@@ -52,8 +52,8 @@
 			
 		@else
 		
-			<h1>D&eacute;sol&eacute;...</h1>
-			<h4>Aucun résultat correspondant à votre recherche n’a été trouvé.</h4>
+			<h1>{{ Lang::get('search.sorry') }}...</h1>
+			<h4>{{ Lang::get('search.noresults') }}</h4>
 			
 		@endif
 		

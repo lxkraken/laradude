@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ App::getLocale() }}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,13 +38,24 @@
 	
 	
         {{ $content }}
-        
               
         @if(Session::has('message'))
             <p class="alert">{{ Session::get('message') }}</p>
         @endif
         
+     <div class="text-center bg-warning" style="margin-top:100px;margin-bottom:60px;padding:20px;">
+		@if(App::getLocale() == 'fr')
+			<p><a href="/language/en">Distribution Dude {{ Lang::get('navigation.inenglish') }}</a></p>
+		@else
+			<p><a href="/language/fr">Distribution Dude {{ Lang::get('navigation.infrench') }}</a></p>
+		@endif
+		{{-- main.blade.php says...| Cookie: {{ Cookie::get('language'); }} | Session: {{ Session::get('language') }} | {{ App::getLocale() }} --}}
+		
+	</div>       
+        
     </div>
+    
+
     
     @if(isset($nav['bottom']))
     {{ $nav['bottom']}}

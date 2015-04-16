@@ -1,5 +1,5 @@
 
-    <div class="container theme-showcase" role="main">
+    <div class="container" role="main">
 
 
 <!-- Start Breadcrumb -->	
@@ -17,7 +17,7 @@
 
 <!-- Popular, Our Picks, etc. special header -->
 	<div class="row img-rounded" style="background-color:#000;color:#fff;padding:4px;margin-bottom:10px;">
-		<span class="glyphicon glyphicon-star" aria-hidden="true" style="margin-right:10px;"></span>Les meilleurs selon Les Dudes
+		<span class="glyphicon glyphicon-star" aria-hidden="true" style="margin-right:10px;"></span>{{ Lang::get('catalogue.thebest') }}
 	</div>
 <!-- End section header -->
 
@@ -43,15 +43,19 @@ $x = 1;
 				<div class="media-body">
 					<!-- lg -->
 					<!-- md -->
-					<h4 class="media-heading visible-md-block visible-lg-block"><a href="{{ $productline['link'] }}">{{ stripslashes($productline['name']) }}</a></h4>
+					<h4 class="media-heading visible-md-block visible-lg-block"><a href="{{ $productline['link'] }}">{{ $productline['name'] }}</a>
+					@if(Auth::check() && Auth::user()->rank > 1)
+						<span class="small admin"> - <a href="/productline/{{ $productline['pl_id'] }}/edit">Admin</a></span>
+					@endif
+					</h4>
 					<div class="visible-md-block visible-lg-block">Libérez la cité d’Arcadia afin de sauver le monde et rallumer la lumière du jour !</div>
 
 					<!-- sm -->
-					<h4 class="media-heading visible-sm-block" style="font-size:14px;font-weight:bold;"><a href="{{ $productline['link'] }}">{{ stripslashes($productline['name']) }}</a></h4>
+					<h4 class="media-heading visible-sm-block" style="font-size:14px;font-weight:bold;"><a href="{{ $productline['link'] }}">{{ $productline['name'] }}</a></h4>
 					<div class="visible-sm-block" style="font-size:12px;">Libérez la cité d’Arcadia afin de sauver le monde et rallumer la lumière du jour !</div>
 					
 					<!-- xs -->
-					<h4 class="media-heading visible-xs-block" style="font-size:12px;font-weight:bold;"><a href="{{ $productline['link'] }}">{{ stripslashes($productline['name']) }}</a></h4>
+					<h4 class="media-heading visible-xs-block" style="font-size:12px;font-weight:bold;"><a href="{{ $productline['link'] }}">{{ $productline['name'] }}</a></h4>
 					<div class="visible-xs-block" style="font-size:10px;">Libérez la cité d’Arcadia afin de sauver le monde et rallumer la lumière du jour !</div>
 
 				</div>

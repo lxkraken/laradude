@@ -16,8 +16,24 @@ class SubproductlinePresenter  {
 		
 		$subplName['e'] = $eBits[0];
 		$subplName['f'] = $fBits[0];
+		
+		$subplCaption['e'] = $subproductline->e_caption;
+		$subplCaption['f'] = $subproductline->f_caption;
+		
+		$this->subproductline->caption = $subplCaption[$locale{0}];
 
-		$this->subproductline->name = (strlen($subproductline->f_name) < 1 && $locale{0} == 'f')  ? $subplName['e'] : $subplName['f'];
+		if(strlen($subplName[$locale{0}]) < 1)
+		{
+			
+			$this->subproductline->name = ($locale{0} == 'f')  ? stripslashes($subplName['e']) : stripslashes($subplName['f']);
+			
+		}
+		else
+		{
+			
+			$this->subproductline->name = $subplName[$locale{0}];
+			
+		}
 		$this->subproductline->logo = $subproductline->logo_url;
 		
 	}

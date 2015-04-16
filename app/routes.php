@@ -16,6 +16,105 @@ Route::get('/', function()
 	return View::make('layouts.main')->nest('content', 'home');
 });
 
+Route::get('image', function()
+{
+    $img = Image::canvas(800, 600, '#ff0000');
+
+    return $img->response();
+});
+
+Route::get('forget', function()
+{
+    Cookie::forget('language');
+    Session::forget('language');
+    
+    echo 'All gone...';
+    
+    
+	$languages = Agent::languages();
+			
+	foreach($languages as $l)
+	{
+		$bits = explode('-', $l);
+		$accepted[] = $bits[0];
+				
+	}
+			
+	$appLocale = App::getLocale();
+	
+	if(in_array($appLocale, $accepted)) echo $appLocale.' is in the $accepted array.';
+});
+
+
+
+
+Route::get('agent', function()
+{
+	$languages = Agent::languages();
+	
+	echo (Agent::isDesktop()) ? 'Desktop' : 'Not a desktop';
+
+	echo '<br />';
+		
+	echo (Agent::isMobile()) ? 'Mobile' : 'Not Mobile';
+	
+	echo '<br />';
+		
+	echo (Agent::isTablet()) ? 'Tablet' : 'Not Tablet';
+	
+	if(Agent::isMobile()) echo Agent::device().'<br />';
+	
+	echo '<br />';
+	
+	echo Agent::browser().'<br />';
+	
+	
+	var_dump($languages);
+	
+	Cookie::forever('Washington', 'wins');
+	
+	if(Cookie::get('language')) Cookie::forget('language');
+	if(Session::has('language')) Session::forget('language');
+	
+	if(!Session::has('language'))
+	{
+
+		if(!Cookie::get('language'))
+		{	
+			$languages = Agent::languages();
+			
+			foreach($languages as $l)
+			{
+				$bits = explode('-', $l);
+				$accepted[] = $bits[0];
+				
+			}
+			
+			$appLocale = App::getLocale();
+
+			if(in_array($appLocale, $accepted))
+			{
+				Session::set('language', $appLocale);
+				Cookie::forever('language', $appLocale);
+			}
+			else
+			{
+				Session::set('language', 'en');
+				Cookie::forever('language', 'en');
+				
+			}
+		
+		}
+		else
+		{
+			Session::set('language', Cookie::get('language'));
+		}
+		
+	}
+	
+	
+});
+
 
 Route::get('assets', function()
 {
@@ -53,86 +152,28 @@ Route::get('catalogue/{lang?}', 'CatalogueController@getIndex');
 
 Route::get('sandbox', function()
 {
-	return View::make('jssandbox');
+		$plIds = DB::table('productlines')
+			->whereNotIn('pl_id', function($query)
+			{
+				$query->select(DB::raw('pl_id'))
+					  ->from('products');
 
-});
-
-Route::get('baskettest', function()
-{
-	$account = Account::findOrFail('I5CgVjhBn2RRV1Ir');
-	
-	$product = Product::findOrFail('BBEPF10');
-						 
-	$preorder = new Preorder($account);
-	$preorder->updateItem($product, $qty);
-	
-	//$product = Product::findOrFail('BBEPF11');
-	
-	
+			})
+			->select('pl_id')
+			->get();
+			
+		foreach($plIds as $plId)
+		{
+			$p[] = $plId->pl_id;
+		}		
 		
+		$plObj = Productline::findMany($p);
+		
+		var_dump($plObj);
 
-	
-	echo '<br /><br />'.$preorder->getNumberOfItems().'<br /><br />'.$preorder->inPreorder($product);
-	
-	/*$account = DB::table('accounts')
-				->where('account_id', '=', 'VZg8N2d1Q3UUf1py')
-				->get();*/
-	
-	//$account = Account::find('VZg8N2d1Q3UUf1py');
-
-	/*$oh = new OrderHelper;
-	
-	$order = Order::Accountid($account->account_id)->notsubmitted()->notsent()->first();
-	
-	$items = $oh->getItems($order);
-	
-	$noi = $oh->getNumberOfItems($order);
-	
-	$product = Product::findOrFail('UBIMU01');
-	
-	$oh->updateItem($product, 5, 0, $order);*/
-	
-	//$basket = new Basket($account);
-	
-	//$items = $basket->getItems();
-	
-	//$product = Product::findOrFail('UBIMU01');
-	
-	//$basket->updateItem($product, 5);
-	
-	
-	
-	//var_dump($items);
-
-	/*foreach($items as $i)
-	{
-		echo $i->code.' '.$i->qty.'<br />';
-	}*/
-	
-	//echo '<br /><br />A total of $'.$basket->getSubtotal();
-	/*$o = $order->getBasket();
-	
-	echo $account->account_id;*/
-	
-	/*$queries = DB::getQueryLog();
-	$result = end($queries);
-	
-	var_dump($result);*/
-	
-
-	
-	//$order = Order::Accountid($account->account_id);
-	
-	//echo 'ordered_items_'.substr($o->order_id, 0, 6);
-	
-	/*foreach($order as $o)
-	{
-		echo $o->order_id;
-	}*/
-	
-	//echo '<br /><br />'.$b->order_id;
 	
 });
+
 //Settings: show form to create settings
 //Settings: show form to create settings
 
@@ -155,18 +196,24 @@ Route::post( '/ajax', array(
     'uses' => 'AjaxController@update'
 ) );
 
-Route::controller('basket', 'BasketController');
+Route::get('/language/{appLocale}', function($appLocale)
+{
+	Cookie::forget('language');
+	//Cookie::forever('language', $appLocale);
+	App::setLocale($appLocale);
+	Session::put('language', $appLocale);
+	
+	return Redirect::back();
+	
+});
 
+Route::controller('basket', 'BasketController');
 
 Route::controller('account', 'AccountController');
 
 Route::controller('order', 'OrderController');
 
 Route::controller('preorder', 'PreorderController');
-
-//Route::controller('test', '\App\Controllers\TestController');
-
-//Route::get('search/{q?}', 'SearchController@getIndex');
 
 Route::controller('search', 'SearchController');
 
@@ -179,6 +226,9 @@ Route::controller('reminders', 'RemindersController');
 Route::resource('product', 'ProductController');
 
 Route::resource('category', 'CategoryController');
+
+
+
 
 Route::resource('productline', 'ProductlineController');
 

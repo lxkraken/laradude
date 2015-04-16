@@ -25,6 +25,10 @@ class ManufacturerController extends BaseController {
 	
 	public function dice($id)
 	{
+		$cl = new ClickLogger($this->account);
+		
+		$cl->registerClick(Request::path());
+		
 		if($this->isAdmin)
 		{
 			$plIds = DB::table('products')

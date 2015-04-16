@@ -32,6 +32,10 @@ class ProductController extends BaseController {
 		
 		//$pp = ($this->account) ? new ProductPresenter(Product::findOrFail(strtoupper($id)), $this->account) : new ProductPresenter(Product::findOrFail(strtoupper($id)));
 		
+		$cl = new ClickLogger($this->account);
+		
+		$cl->registerClick(Request::path());
+		
 		$pp = new ProductPresenter(Product::findOrFail(strtoupper($id)), $this->account);
 
 		$product = $pp->getProduct();

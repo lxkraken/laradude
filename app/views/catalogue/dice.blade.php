@@ -1,5 +1,5 @@
 
-    <div class="container theme-showcase" role="main">
+    <div class="container" role="main">
 		
 	<ol class="breadcrumb hidden-xs">
 		@foreach($breadcrumbs as $crumb)
@@ -60,7 +60,6 @@
 		
 
       </div>
-      <?php var_dump($breadcrumbs); ?>
 
     </div> <!-- /container -->
-<?php var_dump($manufacturers); ?>
+

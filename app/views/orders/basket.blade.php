@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Les cossins dans ton panier...</h1>
+  <h1>{{ Lang::get('basket.itemsin') }}</h1>
   <hr style="border-color:#000;">
 	<div class="row">
 		<div class="col-sm-3">
@@ -22,36 +22,36 @@
 					<div>
 						<table class="table">
 							<tr>
-								<td>Sous-total:</td><td style="padding-left:10px;text-align:right;">${{ $subtotal }}</td>
+								<td>{{ Lang::get('basket.subtotal') }}</td><td style="padding-left:10px;text-align:right;">${{ $subtotal }}</td>
 							</tr>
 							<tr>
-								<td>TPS:</td><td style="padding-left:10px;text-align:right;">${{ $taxes['gst'] }}</td>
+								<td>{{ Lang::get('basket.gst') }}</td><td style="padding-left:10px;text-align:right;">${{ $taxes['gst'] }}</td>
 							</tr>
 							<tr>
-								<td>TVQ:</td><td style="padding-left:10px;text-align:right;">${{ $taxes['pst'] }}</td>
+								<td>{{ Lang::get('basket.pst') }}</td><td style="padding-left:10px;text-align:right;">${{ $taxes['pst'] }}</td>
 							</tr>
 							<tr class="info">
-								<td><strong>Grand total:</strong></td><td style="padding-left:10px;text-align:right;"><strong>${{ $grandTotal }}</strong></td>
+								<td><strong>{{ Lang::get('basket.grandtotal') }}</strong></td><td style="padding-left:10px;text-align:right;"><strong>${{ $grandTotal }}</strong></td>
 							</tr>
 						</table>
 					  </div>
 					<div class="text-center">
-						<button class="btn btn-success" type="button" onClick="submitBasket()"><span class="glyphicon glyphicon-ok"></span> Confirmer la commande</button>
+						<button class="btn btn-success" type="button" onClick="submitBasket()"><span class="glyphicon glyphicon-ok"></span> {{ Lang::get('basket.confirm') }}</button>
 					</div>
 					<div class="text-center" style="margin-top:40px;">
-						<button class="btn btn-info" type="button" onClick="refreshBasket()"><span class="glyphicon glyphicon-refresh"></span> Rafra&icirc;chir</button>
+						<button class="btn btn-info" type="button" onClick="refreshBasket()"><span class="glyphicon glyphicon-refresh"></span> {{ Lang::get('basket.refresh') }}</button>
 					</div>
 				</div>
 				@if(Auth::check() && Auth::user()->rank > 1)
 				<div class="img-rounded" style="background-color:#ff0;min-height:200px;padding:10px;margin-top:20px;">
 					<form class="form-group" id="quickSearch" method="POST" action="/basket/quicksearch" accept-charset="UTF-8">
-						<input type="text" class="form-control input-sm" name="qs" placeholder="Rechercher &amp; Rajouter"
+						<input type="text" class="form-control input-sm" name="qs" placeholder="{{ Lang::get('basket.searchadd') }}"
 						@if(isset($qsQuery))
 							value="{{ $qsQuery }}"
 						@endif
 
 						/>
-						<button class="btn btn-default" type="submit">Rechercher</button>
+						<button class="btn btn-default" type="submit">{{ Lang::get('basket.search') }}</button>
 					</form>
 					@if(isset($qsResults))
 						<div>{{ $qsMsg }}</div>
@@ -76,9 +76,9 @@
 		  <tr style="font-weight:bold;text-align:center;">
 			  <td style="vertical-align:middle;">Code</td>
 			  <td style="vertical-align:middle;">Description</td>
-			  <td style="vertical-align:middle;">Quantit&eacute;</td>
-			  <td style="vertical-align:middle;">Prix Sugger&eacute;</td>
-			  <td style="vertical-align:middle;">Votre Prix</td>
+			  <td style="vertical-align:middle;">{{ Lang::get('basket.qty') }}</td>
+			  <td style="vertical-align:middle;">{{ Lang::get('catalogue.msrp') }}</td>
+			  <td style="vertical-align:middle;">{{ Lang::get('basket.yourprice') }}</td>
 			  <td style="vertical-align:middle;">Total</td>
 			  <td><span id="formAction"></span></td>
 		  </tr>
@@ -99,7 +99,7 @@
 			  <td style="text-align:center;vertical-align:middle;">${{ $i['msrp'] }}</td>
 			  <td style="text-align:center;vertical-align:middle;">${{ $i['retailer_price'] }}</td>
 			  <td style="text-align:center;vertical-align:middle;">${{ $i['total'] }}</td>
-			  <td  class="remove-item" style="text-align:center;vertical-align:middle;"><a href="/basket/remove/{{ $i['code'] }}" id="remove-{{ $i['code'] }}" alt="Supprimer {{ $i['code'] }} du panier" title="Supprimer {{ $i['code'] }} du panier"><span class="glyphicon glyphicon-remove"></span></a></td>
+			  <td  class="remove-item" style="text-align:center;vertical-align:middle;"><a href="/basket/remove/{{ $i['code'] }}" id="remove-{{ $i['code'] }}" alt="{{ Lang::get('basket.remove') }} {{ $i['code'] }} {{ Lang::get('basket.frombasket') }}" title="{{ Lang::get('basket.remove') }} {{ $i['code'] }} {{ Lang::get('basket.frombasket') }}"><span class="glyphicon glyphicon-remove"></span></a></td>
 		  <script language="javascript" type="text/javascript">
 			$("input[name='{{ $i['code'] }}']").TouchSpin({
 			  min: 0,

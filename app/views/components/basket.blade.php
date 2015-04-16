@@ -41,7 +41,7 @@
   <!-- input name="buy" src="{{ asset('../img/goButton.png') }}" class="goButton" style="position:relative;top:6px;" type="image" -->
   
   @if($verb == 'buy')
-	  <button type="submit" class="btn btn-success btn-sm" style="margin-top:20px;"><span class="glyphicon glyphicon-shopping-cart"></span> Acheter</button>
+	  <button type="submit" class="btn btn-success btn-sm" style="margin-top:20px;"><span class="glyphicon glyphicon-shopping-cart"></span> {{ Lang::get('catalogue.buy') }}</button>
   @elseif($verb == 'reserve')
 	@if($product['available'] < 5)
       <button type="submit" class="btn btn-danger btn-sm" style="margin-top:20px;"><span class="glyphicon glyphicon-paperclip"></span> {{ $product['button'] }}</button>
@@ -49,7 +49,7 @@
 	  <button type="submit" class="btn btn-danger btn-sm" style="margin-top:20px;" disabled="disabled"><span class="glyphicon glyphicon-paperclip"></span> {{ $product['button'] }}</button>
 	@endif
   @else
-      <button type="submit" class="btn btn-warning btn-sm" style="margin-top:20px;"><span class="glyphicon glyphicon-user"></span> p'tite t&ecirc;te</button>
+      <button type="submit" class="btn btn-warning btn-sm" style="margin-top:20px;"><span class="glyphicon glyphicon-user"></span> {{ Lang::get('catalogue.head') }}</button>
   @endif
 @if($product['available'] < 5)
   <script>

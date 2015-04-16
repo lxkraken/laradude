@@ -52,7 +52,12 @@
         			
 		<!-- lg -->
 		<!-- md -->
-		<h1 class="visible-md-block visible-lg-block" style="font-size:4vmin;">{{ $pl['name'] }}</h1>
+		<h1 class="visible-md-block visible-lg-block" style="font-size:4vmin;">{{ $pl['name'] }}
+					@if(Auth::check() && Auth::user()->rank > 1)
+						<span class="small admin"> - <a href="/productline/{{ $pl['pl_id'] }}/edit">Admin</a></span>
+					@endif
+		
+		</h1>
 					
 		<!-- sm -->
 		<h1 class="visible-sm-block" style="font-size:3vw;">{{ $pl['name'] }}</h1>
@@ -123,14 +128,14 @@
 			{{ strtoupper($h['code']) }}
 				
 			@if($h['prod_lang'] == 'f')
-			  -&nbsp;&Eacute;dition fran&ccedil;aise<br/>
+			  -&nbsp;{{ Lang::get('catalogue.frenched') }}<br/>
 			@elseif($h['prod_lang'] == 'e')
-			  -&nbsp;&Eacute;dition anglaise<br/>
+			  -&nbsp;{{ Lang::get('catalogue.englished') }}<br/>
 			@elseif($h['prod_lang'] == 'm')
-			  -&nbsp;&Eacute;dition multilingue<br/>
+			  -&nbsp;{{ Lang::get('catalogue.multied') }}<br/>
 			@endif
 							  
-			Prix sugg&eacute;r&eacute;: ${{ $h['msrp'] }}
+			{{ Lang::get('catalogue.msrp') }}: ${{ $h['msrp'] }}
 		  </p>  
 	  
 		  @if(Auth::check() && Auth::user()->rank > 1)
@@ -139,15 +144,15 @@
 	 
 		  <p>
 			@if(strlen($h['players']) > 0)
-			  Nombre de joueurs: {{ $h['players'] }}<br/>
+			  {{ Lang::get('catalogue.numplayers') }}: {{ $h['players'] }}<br/>
 			@endif
 							  
 			@if(strlen($h['age']) > 0)
-			  &Agrave;ges: {{ $h['age'] }}<br/>
+			  {{ Lang::get('catalogue.ages') }}: {{ $h['age'] }}<br/>
 			@endif
 							  
 			@if(strlen($h['case_qty']) > 0 && $h['case_qty'] > 0)
-			  Caisse compl&egrave;te: {{ $h['case_qty'] }}<br/>
+			  {{ Lang::get('catalogue.caseqty') }}: {{ $h['case_qty'] }}<br/>
 			@endif
 							  
 			@if(strlen($h['upc']) > 0)
@@ -155,9 +160,9 @@
 			@endif
 							  
 			@if($h['prod_type'] == 1)
-			  Mat&eacute;riel de base<br/>
+			  {{ Lang::get('catalogue.core') }}<br/>
 			@elseif($h['prod_type'] == 2)
-			  Accessoire / Suppl&eacute;ment<br/>
+			  {{ Lang::get('catalogue.expansion') }}<br/>
 			@endif
 		  </p> 
 
@@ -213,19 +218,19 @@
 					{{ strtoupper($h['code']) }}
 					
 					@if($h['prod_lang'] == 'f')
-					  &nbsp;-&nbsp;&Eacute;dition fran&ccedil;aise<br/>
+					  -&nbsp;{{ Lang::get('catalogue.frenched') }}<br/>
 					@elseif($h['prod_lang'] == 'e')
-					  &nbsp;-&nbsp;&Eacute;dition anglaise<br/>
+					  -&nbsp;{{ Lang::get('catalogue.englished') }}<br/>
 					@elseif($h['prod_lang'] == 'm')
-					  &nbsp;-&nbsp;&Eacute;dition multilingue<br/>
+					  -&nbsp;{{ Lang::get('catalogue.multied') }}<br/>
 					@endif
 								  
-					Prix sugg&eacute;r&eacute;: ${{ $h['msrp'] }}<br />
+					{{ Lang::get('catalogue.msrp') }}: ${{ $h['msrp'] }}<br />
 
 					@if($h['prod_type'] == 1)
-					  Mat&eacute;riel de base<br/>
+					  {{ Lang::get('catalogue.core') }}<br/>
 					@elseif($h['prod_type'] == 2)
-					  Accessoire / Suppl&eacute;ment<br/>
+					  {{ Lang::get('catalogue.expansion') }}<br/>
 					@endif
 				  </p>
 				@if(Auth::check() && Auth::user()->rank > 1)
@@ -274,15 +279,15 @@
 		
 		<br />
 		@if($h['prod_lang'] == 'f')
-		  &Eacute;dition fran&ccedil;aise<br/>
+		  {{ Lang::get('catalogue.frenched') }}e<br/>
 		@elseif($h['prod_lang'] == 'e')
-		  &Eacute;dition anglaise<br/>
+		  {{ Lang::get('catalogue.englished') }}<br/>
 		@elseif($h['prod_lang'] == 'm')
-		  &Eacute;dition multilingue<br/>
+		  {{ Lang::get('catalogue.multied') }}<br/>
 		@endif
 								  
 		{{ strtoupper($h['code']) }}<br />
-		Prix sugg&eacute;r&eacute;: ${{ $h['msrp'] }}
+		{{ Lang::get('catalogue.msrp') }}: ${{ $h['msrp'] }}
 		
 		@if(Auth::check() && Auth::user()->rank > 1)
 			<p>Stock: {{ $h['stock']}}&nbsp;&nbsp;&nbsp;&nbsp;Reserved: {{ $h['reserved'] }}</p>
@@ -357,15 +362,15 @@
 			<strong>{{ $p['name'] }}</strong><br />
 			
 			@if($p['prod_lang'] == 'f')
-			  &Eacute;dition fran&ccedil;aise<br/>
+			  {{ Lang::get('catalogue.frenched') }}<br/>
 			@elseif($p['prod_lang'] == 'e')
-			  &Eacute;dition anglaise<br/>
+			  {{ Lang::get('catalogue.englished') }}<br/>
 			@elseif($p['prod_lang'] == 'm')
-			  &Eacute;dition multilingue<br/>
+			  {{ Lang::get('catalogue.multied') }}<br/>
 			@endif
 			
 			{{ strtoupper($p['code']) }}<br />
-			Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}
+			{{ Lang::get('catalogue.msrp') }}: ${{ $p['msrp'] }}
 					  
 			@if(Auth::check() && Auth::user()->rank > 1)
 				<p>Stock: {{ $p['stock'] }}&nbsp;&nbsp;&nbsp;&nbsp;Reserved: {{ $p['reserved'] }}</p>
@@ -390,15 +395,15 @@
 		  <div class="visible-xs-block visible-sm-block" style="font-size:12px;">
 		    <strong>{{ $p['name'] }}</strong><br />
 			@if($p['prod_lang'] == 'f')
-				&Eacute;dition fran&ccedil;aise<br/>
+				{{ Lang::get('catalogue.frenched') }}<br/>
 			@elseif($p['prod_lang'] == 'e')
-				&Eacute;dition anglaise<br/>
+				{{ Lang::get('catalogue.englished') }}<br/>
 			@elseif($p['prod_lang'] == 'm')
-				&Eacute;dition multilingue<br/>
+				{{ Lang::get('catalogue.multied') }}<br/>
 			@endif
 							  
 			{{ strtoupper($p['code']) }}<br />
-			Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}
+			{{ Lang::get('catalogue.msrp') }}: ${{ $p['msrp'] }}
 			
 			@if(Auth::check() && Auth::user()->rank > 1)
 				<p>Stock: {{ $p['stock'] }}&nbsp;&nbsp;&nbsp;&nbsp;Reserved: {{ $p['reserved'] }}</p>
@@ -466,15 +471,15 @@
 			<strong>{{ $p['name'] }}</strong><br />
 			
 			@if($p['prod_lang'] == 'f')
-			  &Eacute;dition fran&ccedil;aise<br/>
+			  {{ Lang::get('catalogue.frenched') }}<br/>
 			@elseif($p['prod_lang'] == 'e')
-			  &Eacute;dition anglaise<br/>
+			  {{ Lang::get('catalogue.englished') }}<br/>
 			@elseif($p['prod_lang'] == 'm')
-			  &Eacute;dition multilingue<br/>
+			  {{ Lang::get('catalogue.multied') }}<br/>
 			@endif
 			
 			{{ strtoupper($p['code']) }}<br />
-			Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}
+			{{ Lang::get('catalogue.msrp') }}: ${{ $p['msrp'] }}
 					  
 			@if(Auth::check() && Auth::user()->rank > 1)
 				<p>Stock: {{ $p['stock'] }}&nbsp;&nbsp;&nbsp;&nbsp;Reserved: {{ $p['reserved'] }}</p>
@@ -499,15 +504,15 @@
 		  <div class="visible-xs-block visible-sm-block" style="font-size:12px;">
 		    <strong>{{ $p['name'] }}</strong><br />
 			@if($p['prod_lang'] == 'f')
-				&Eacute;dition fran&ccedil;aise<br/>
+				{{ Lang::get('catalogue.frenched') }}<br/>
 			@elseif($p['prod_lang'] == 'e')
-				&Eacute;dition anglaise<br/>
+				{{ Lang::get('catalogue.englished') }}<br/>
 			@elseif($p['prod_lang'] == 'm')
-				&Eacute;dition multilingue<br/>
+				{{ Lang::get('catalogue.multied') }}<br/>
 			@endif
 							  
 			{{ strtoupper($p['code']) }}<br />
-			Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}
+			{{ Lang::get('catalogue.msrp') }}: ${{ $p['msrp'] }}
 			
 			@if(Auth::check() && Auth::user()->rank > 1)
 				<p>Stock: {{ $p['stock'] }}&nbsp;&nbsp;&nbsp;&nbsp;Reserved: {{ $p['reserved'] }}</p>

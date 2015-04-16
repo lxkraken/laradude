@@ -43,7 +43,7 @@ class NavBar {
 	private function getUsername()
 	{
 		$this->data['linkUrl'] = '/account/dashboard';
-		$this->data['linkText'] = 'Salut '.$this->account->username.'!';
+		$this->data['linkText'] = Lang::get('navigation.hello').' '.$this->account->username.'!';
 		
 	}
 

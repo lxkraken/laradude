@@ -38,7 +38,7 @@ View::composer('layouts.main', function($view)
 	}
 	else
 	{
-		$nav['linkText'] = 'Connexion';
+		$nav['linkText'] = Lang::get('navigation.login');
 		$nav['linkUrl'] = '/account/login';
 		
 	}

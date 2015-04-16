@@ -26,36 +26,58 @@ class ProductPresenter  {
 		$subtitle['e'] = $product->e_subtitle;
 		$subtitle['f'] = $product->f_subtitle;
 		
-		$this->product->name = stripslashes($name[$locale{0}]);
-		
+		if(strlen($name[$locale{0}]) < 1)
+		{
+			
+			$this->product->name = ($locale{0} == 'f')  ? stripslashes($name['e']) : stripslashes($name['f']);
+			
+		}
+		else
+		{
+			
+			$this->product->name = $name[$locale{0}];
+			
+		}
+
+		if(strlen($subtitle[$locale{0}]) < 1)
+		{
+			
+			$this->product->subtitle = ($locale{0} == 'f')  ? stripslashes($subtitle['e']) : stripslashes($subtitle['f']);
+			
+		}
+		else
+		{
+			
+			$this->product->subtitle = $subtitle[$locale{0}];
+			
+		}		
 		$this->product->description = (strlen($product->f_desc1) < 1)  ? stripslashes($product->e_desc1).stripslashes($product->e_desc2) : stripslashes($product->f_desc1).stripslashes($product->f_desc2);
-		$this->product->subtitle = (strlen($product->f_subtitle) < 1)  ? stripslashes($product->e_subtitle) : stripslashes($product->f_subtitle);
 		
 		switch($product->available)
 		{
 			case 0;
-				$this->product->button = 'Y\'a n\'a plus';
+				$this->product->button = Lang::get('catalogue.nomore');
 				break;
 				
 			case 1:
-				$this->product->button = 'En Transit';
+				$this->product->button = Lang::get('catalogue.intransit');
 				break;
 				
 			case 2:
-				$this->product->button = 'En Commande';
+				$this->product->button = Lang::get('catalogue.onorder');
 				break;
 				
 			case 3:
-				$this->product->button = 'En R&eacute;impression';
+				$this->product->button = Lang::get('catalogue.reprint');
 				break;
 				
 			case 4:
 				$dateBits = explode('-', $product->release_date);
-				$this->product->button = $this->getFrenchSeason($dateBits[1]).', '.$dateBits[0];
+				$this->product->button = $this->getSeason($dateBits[1]).', '.$dateBits[0];
 				break;
 				
 			case 5:
-				$this->product->button = 'Fini Pour Toute La Vie';
+				$this->product->button = Lang::get('catalogue.goneforever');
 				break;
 		}
 		
@@ -70,32 +92,32 @@ class ProductPresenter  {
 //////////////////////////////////////////////////////////////////
 //private fuctions
 	
-	private function getFrenchSeason($month) {
+	private function getSeason($month) {
 		
 		switch($month) {
 			
 			case 12:
 			case 1:
 			case 2:
-				$output = 'Hiver';
+				$output = Lang::get('catalogue.winter');
 				break;
 			
 			case 3:
 			case 4:
 			case 5:
-				$output = 'Printemps';
+				$output = Lang::get('catalogue.spring');
 				break;
 			
 			case 6:
 			case 7:
 			case 8:
-				$output = '&Eacute;t&eacute;';
+				$output = Lang::get('catalogue.summer');
 				break;
 				
 			case 9:
 			case 10:
 			case 11:
-				$output = 'Automne';
+				$output = Lang::get('catalogue.autumn');
 				break;
 				
 		}
@@ -103,39 +125,6 @@ class ProductPresenter  {
 		return $output;
 		
 	}
-	
-	private function getEnglishSeason($month) {
-		
-		switch($month) {
-			
-			case 12:
-			case 1:
-			case 2:
-				$output = 'Winter';
-				break;
-			
-			case 3:
-			case 4:
-			case 5:
-				$output = 'Spring';
-				break;
-			
-			case 6:
-			case 7:
-			case 8:
-				$output = 'Summer';
-				break;
-				
-			case 9:
-			case 10:
-			case 11:
-				$output = 'Autumn';
-				break;
-				
-		}
-		
-		return $output;
-		
-	}
+
 	
 }

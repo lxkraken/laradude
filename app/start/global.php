@@ -19,7 +19,7 @@ ClassLoader::addDirectories(array(
 	app_path().'/models',
 	app_path().'/database/seeds',
 	app_path().'/library',
-        app_path().'/presenters'
+    app_path().'/presenters'
 
 ));
 
@@ -106,3 +106,85 @@ require app_path().'/composers.php';
  */
 
 require app_path().'/events.php';
+
+/*
+ * ------------------------------------------------------------------------
+ * Set Session For Hardware & Cookie For Locale
+ * ------------------------------------------------------------------------
+ * 
+ * Using Laravel-Agent, we figure out what sort of device a visitor is using.
+ * We also check to see if a preferred language has been chosen and stored
+ * in a cookie. If not, we check the languages accepted by the browser and
+ * use App::setLocale to set it to something acceptable, defaulting to French
+ * before English.
+ * 
+ */
+	if(!Session::has('hardware'))
+	{
+		if(Agent::isMobile())
+		{
+			if(Agent::isTablet()) {
+				Session::put('hardware', 'tablet');
+			}
+			else
+			{
+				Session::put('hardware', 'phone');
+			}
+			
+		}
+		else
+		{
+			
+				Session::put('hardware', 'desktop');
+		}
+		
+	}
+
+	if(!Session::get('language'))
+	{
+		if(!Cookie::get('language'))
+		{	
+			$languages = Agent::languages();
+			
+			$accepted = array();
+			
+			foreach($languages as $l)
+			{
+				$bits = explode('-', $l);
+				$accepted[] = $bits[0];
+					
+			}
+				
+			$appLocale = App::getLocale();
+
+			if(in_array($appLocale, $accepted))
+			{
+				Cookie::forever('language', $appLocale);
+				Session::put('language', $appLocale);
+				App::setLocale($appLocale);
+			}
+			else
+			{
+				Cookie::forever('language', 'en');
+				Session::put('language', 'en');
+				App::setLocale('en');
+					
+			}
+			
+		}
+		else
+		{
+			$appLocale = Cookie::get('language');
+			Session::put('language', $appLocale);
+			App::setLocale($appLocale);
+			
+		}
+	}
+	else
+	{
+		$appLocale = Session::get('language');
+		Cookie::forever('language', $appLocale);
+		App::setLocale($appLocale);
+		
+	}		
+

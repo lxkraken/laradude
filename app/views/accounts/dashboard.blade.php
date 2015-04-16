@@ -1,11 +1,11 @@
 <div class="container">
-	<div class="form pull-right text-center img-rounded" style="background-color:#fff;padding:10px;">
-		<h4 style="font-weight:bold;">Ben Salut, {{ $user->username }}!</h4>
-		Comment &ccedil;a va, ce soir?<br />
+	<div class="form pull-right text-center img-rounded whitebox">
+		<h4 style="font-weight:bold;">{{ Lang::get('account.hey') }}, {{ $user->username }}!</h4>
+		{{ Lang::get('account.howgoes') }}<br />
 		
-		<small>Derni&egrave;re connexion: {{ $user->last_login }}</small>
+		<small>{{ Lang::get('account.lastlogin') }} {{ $user->last_login }}</small>
 		<form action="{{ action('AccountController@postLogout') }}" method="POST">
-			<button type="submit" class="btn btn-primary btn-sm" value="">&Agrave; plus, man...</button>
+			<button type="submit" class="btn btn-primary btn-sm" value="">{{ Lang::get('account.cul8r') }}</button>
 		</form>
 
 	</div>

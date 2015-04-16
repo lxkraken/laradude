@@ -72,26 +72,26 @@
 				<p>{{ strtoupper($p['code']) }}
 				
 				 @if($p['prod_lang'] == 'f')
-				   &nbsp;-&nbsp;&Eacute;dition fran&ccedil;aise<br/>
+				   -&nbsp;{{ Lang::get('catalogue.frenched') }}<br/>
 				 @elseif($p['prod_lang'] == 'e')
-				    &nbsp;-&nbsp;&Eacute;dition anglaise<br/>
+				    -&nbsp;{{ Lang::get('catalogue.englished') }}<br/>
 				 @elseif($p['prod_lang'] == 'm')
-				    &nbsp;-&nbsp;&Eacute;dition multilingue<br/>
+				    -&nbsp;{{ Lang::get('catalogue.multied') }}<br/>
 				 @endif
 						  
-				 Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}
+				 {{ Lang::get('catalogue.msrp') }}: ${{ $p['msrp'] }}
 				</p>
 				<p>
 			    @if(strlen($p['players']) > 0)
-				  Nombre de joueurs: {{ $p['players'] }}<br/>
+				  {{ Lang::get('catalogue.numplayers') }}: {{ $p['players'] }}<br/>
 				@endif
 						  
 				@if(strlen($p['age']) > 0)
-				  &Agrave;ges: {{ $p['age'] }}<br/>
+				  {{ Lang::get('catalogue.ages') }}: {{ $p['age'] }}<br/>
 				@endif
 						  
 				@if(strlen($p['case_qty']) > 0 && $p['case_qty'] > 0)
-				  Caisse compl&egrave;te: {{ $p['case_qty'] }}<br/>
+				  {{ Lang::get('catalogue.caseqty') }}: {{ $p['case_qty'] }}<br/>
 				@endif
 						  
 				@if(strlen($p['upc']) > 0)
@@ -99,9 +99,9 @@
 				@endif
 				
 				@if($p['prod_type'] == 1)
-					Mat&eacute;riel de base<br/>
+					{{ Lang::get('catalogue.core') }}<br/>
 				@elseif($p['prod_type'] == 2)
-					Accessoire / Suppl&eacute;ment<br/>
+					{{ Lang::get('catalogue.expansion') }}<br/>
 				@endif
 				
 				</p>
@@ -136,25 +136,25 @@
 				<p>{{ strtoupper($p['code']) }}
 				
 				 @if($p['prod_lang'] == 'f')
-				   &nbsp;-&nbsp;&Eacute;dition fran&ccedil;aise<br/>
+				   -&nbsp;{{ Lang::get('catalogue.frenched') }}<br/>
 				 @elseif($p['prod_lang'] == 'e')
-				    &nbsp;-&nbsp;&Eacute;dition anglaise<br/>
+				    -&nbsp;{{ Lang::get('catalogue.englished') }}<br/>
 				 @elseif($p['prod_lang'] == 'm')
-				    &nbsp;-&nbsp;&Eacute;dition multilingue<br/>
+				    -&nbsp;{{ Lang::get('catalogue.multied') }}<br/>
 				 @endif
 						  
-				 Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}<br />
+				 {{ Lang::get('catalogue.msrp') }}: ${{ $p['msrp'] }}<br />
 
 			    @if(strlen($p['players']) > 0)
-				  Nombre de joueurs: {{ $p['players'] }}<br/>
+				  {{ Lang::get('catalogue.numplayers') }}: {{ $p['players'] }}<br/>
 				@endif
 						  
 				@if(strlen($p['age']) > 0)
-				  &Agrave;ges: {{ $p['age'] }}<br/>
+				  {{ Lang::get('catalogue.ages') }}: {{ $p['age'] }}<br/>
 				@endif
 						  
 				@if(strlen($p['case_qty']) > 0 && $p['case_qty'] > 0)
-				  Caisse compl&egrave;te: {{ $p['case_qty'] }}<br/>
+				  {{ Lang::get('catalogue.caseqty') }}: {{ $p['case_qty'] }}<br/>
 				@endif
 						  
 				@if(strlen($p['upc']) > 0)
@@ -162,9 +162,9 @@
 				@endif
 				
 				@if($p['prod_type'] == 1)
-					Mat&eacute;riel de base<br/>
+					{{ Lang::get('catalogue.core') }}<br/>
 				@elseif($p['prod_type'] == 2)
-					Accessoire / Suppl&eacute;ment<br/>
+					{{ Lang::get('catalogue.expansion') }}<br/>
 				@endif
 				
 				</p>

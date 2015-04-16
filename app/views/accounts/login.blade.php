@@ -9,24 +9,24 @@ $( document ).ready(function() {
 
 {{ Form::open(array('url'=>'account/signin')) }}
 
-    <h2 class="form-signin-heading">Se connecter</h2>
+    <h2 class="form-signin-heading">{{ Lang::get('account.pleaselogin') }}</h2>
 	<div class="form-group">
-		{{ Form::label('username', 'Nom d\'utilisateur', array('for'=>'username')) }}	
-		{{ Form::text('username', null, array('class'=>'form-control', 'id' => 'username', 'placeholder'=>'Nom d\'utilisateur')) }}
+		{{ Form::label('username', Lang::get('account.username'), array('for'=>'username')) }}	
+		{{ Form::text('username', null, array('class'=>'form-control', 'id' => 'username', 'placeholder'=> Lang::get('account.username'))) }}
 	</div>
 	<div class="form-group">
-		{{ Form::label('password', 'Mot de passe', array('for'=>'password')) }}
-		{{ Form::password('password', array('class'=>'form-control', 'id' => 'inputPassword', 'placeholder'=>'Mot de passe')) }}
+		{{ Form::label('password', Lang::get('account.password'), array('for'=>'password')) }}
+		{{ Form::password('password', array('class'=>'form-control', 'id' => 'inputPassword', 'placeholder'=> Lang::get('account.password'))) }}
 	</div>
 	<div class="form-group">
-		{{ Form::checkbox('remember', '1', 'true') }} {{ Form::label('remember', 'Se souvenir de moi', array('for'=>'remember')) }}
+		{{ Form::checkbox('remember', '1', 'true') }} {{ Form::label('remember', Lang::get('account.rememberme'), array('for'=>'remember')) }}
 	</div>
  
-    {{ Form::submit('Se connecter', array('class'=>'btn btn-primary'))}} <span style="float:right;">{{ HTML::link('reminders/remind', 'Vous avez oubli&eacute; votre mot de passe?') }} </span>
+    {{ Form::submit(Lang::get('account.login'), array('class'=>'btn btn-primary'))}} <span style="float:right;">{{ HTML::link('reminders/remind', Lang::get('account.forgotpassword')) }} </span>
 {{ Form::close() }}
 
 	<div class="well" style="margin-top:20px;">
-		Si vous n'avez pas de compte avec nous... blah blah blah
+		{{ Lang::get('account.noaccount') }}
 	</div>
 	
 

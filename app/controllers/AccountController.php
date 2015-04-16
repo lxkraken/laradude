@@ -45,7 +45,30 @@ class AccountController extends BaseController {
 	{
 		$data['user'] = Account::findOrFail(Auth::id());
 		
-		$this->layout->content = View::make('accounts.dashboard', $data);
+		if($data['user']->rank > 1)
+		{
+			$ah = new AdminHelper;
+			
+			$plObjs = $ah->productlinesNoProduct();
+			
+			if($plObjs) foreach($plObjs as $plObj)
+			{
+				$plp = new ProductlinePresenter($plObj, $data['user']);
+				$productlines[] = $plp->getProductline();
+			}
+			
+			$data['plNoProduct'] = $productlines;
+			
+			$this->layout->content = View::make('admin.dashboard', $data);
+		}
+		elseif($data['user']->rank == 1)
+		{
+			$this->layout->content = View::make('accounts.dashboard', $data);
+		}
+		else
+		{
+			return Redirect::to('account/login');
+		}
 		
 	}
 

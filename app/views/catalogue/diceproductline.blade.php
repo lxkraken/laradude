@@ -93,7 +93,11 @@
 			</div>
 			<div class="media-body visible-xs">
 				<h4 class="media-heading" style="margin-top:10px;"><a data-toggle="collapse" href="#collapse{{ $subpl['subpl_id'] }}" aria-expanded="false" aria-controls="collapse{{ $subpl['subpl_id'] }}">{{ $subpl['name'] }}</a></h4>
-				Beautiful, beautiful dice...
+				@if(strlen($subpl['caption']) < 1)
+					Beautiful, beautiful dice...
+				@else
+					{{ $subpl['caption'] }}
+				@endif
 			</div>
 			<a id="{{ $subpl['subpl_id'] }}"></a>
 			<div class="collapse well well-sm {{ $subpl['open'] }}" id="collapse{{ $subpl['subpl_id']}}" style="margin-top:20px;">
@@ -140,7 +144,7 @@
 						    {{ $p['subtitle'] }}<br />
 						  @endif
 						  {{ $p['code'] }}<br />
-						  Prix sugg&eacute;r&eacute;: ${{ $p['msrp'] }}
+						  {{ Lang::get('catalogue.msrp') }}: ${{ $p['msrp'] }}
 						  
 						  @if(Auth::check())
 						  <br />

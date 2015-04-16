@@ -89,13 +89,17 @@ class CatalogueController extends BaseController {
 			
 			foreach($catIds as $catId) {
 				
-				$category = Category::find($catId->cat_id);
+				$c = Category::find($catId->cat_id);
 				
-				if($category->menu_order)
+				$cp = new CategoryPresenter($c);
+				
+				$category = $cp->getCategory();
+				
+				if($category['menu_order'])
 				{
-					$cat[$category->menu_order]['id'] = $category->cat_id;
-					$cat[$category->menu_order]['name'] = $category->f_name;
-					$cat[$category->menu_order]['logo'] = $category->logo;
+					$cat[$category['menu_order']]['id'] = $category['cat_id'];
+					$cat[$category['menu_order']]['name'] = $category['name'];
+					$cat[$category['menu_order']]['logo'] = $category['logo'];
 				}
 				
 			}

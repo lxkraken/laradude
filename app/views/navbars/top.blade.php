@@ -39,23 +39,23 @@
 						{{ Form::open(array('url' => 'search', 'method' => 'get', 'role' => 'search', 'class' => 'navbar-form navbar-left')) }}
 						  <div class="form-group" style="text-align:center;">
 							  
-							  {{ Form::text('q', Input::get('q'), array('class'=> 'form-control', 'placeholder' => 'Recherche Rapide')) }}
+							  {{ Form::text('q', Input::get('q'), array('class'=> 'form-control', 'placeholder' => Lang::get('navigation.search'))) }}
 							<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
 							  
 						  </div>
 					    {{ form::close() }}
 					</li>
 
-			<li class="active"><a href="/">Accueil</a></li>
-            <li><a href="#new">Tout neuf</a></li>
+			<li class="active"><a href="/">{{ Lang::get('navigation.home') }}</a></li>
+            <li><a href="#new">{{ Lang::get('navigation.newstuff') }}</a></li>
 
             <li class="dropdown">
               <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Catalogue <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-				<li>{{ HTML::link('/catalogue/f', 'Jeux en fran&ccedil;ais') }}</li>
-				<li>{{ HTML::link('/catalogue/e', 'Jeux en anglais') }}</li>
-				<li>{{ HTML::link('/catalogue/dice', 'D&eacute;s et accessoires') }}</li>
-				<li>{{ HTML::link('/catalogue/b', 'Les B&eacute;belles') }}</li>
+				<li>{{ HTML::link('/catalogue/f', Lang::get('navigation.gamesinfrench')) }}</li>
+				<li>{{ HTML::link('/catalogue/e', Lang::get('navigation.gamesinenglish')) }}</li>
+				<li>{{ HTML::link('/catalogue/dice', Lang::get('navigation.diceandacc')) }}</li>
+				<li>{{ HTML::link('/catalogue/b', Lang::get('navigation.dustmagnets')) }}</li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
@@ -63,22 +63,22 @@
               </ul>
             </li>
             
-             <li><a href="#contact">D&eacute;taillants</a></li>
-            <li><a href="#contact">Nous contacter</a></li> 
+             <li><a href="#contact">{{ Lang::get('navigation.retailers') }}</a></li>
+            <li><a href="#contact">{{ Lang::get('navigation.contactus') }}</a></li> 
 
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
 			@if(isset($nav['basket']))
-                 <li><a href="/basket">Panier <span id="animbuy" class="badge">${{ number_format($nav['basket'], 2) }}</span></a></li>
+                 <li><a href="/basket">{{ Lang::get('navigation.basket') }} <span id="animbuy" class="badge">${{ number_format($nav['basket'], 2) }}</span></a></li>
             @endif
             
             @if(isset($nav['reserve']))
-				 <li><a href="/preorder">R&eacute;serve <span id="animreserve" class="badge">{{ $nav['reserve'] }}</span></a></li>
+				 <li><a href="/preorder">{{ Lang::get('navigation.preorder') }} <span id="animreserve" class="badge">{{ $nav['reserve'] }}</span></a></li>
 			@endif
 			
 			@if(isset($nav['titetete']))
-				<li><a href="#">Truc dans ma p'tite t&ecirc;te <span id="animtt" class="badge">{{ $nav['titetete'] }}</span></a></li>
+				<li><a href="#">{{ Lang::get('navigation.inmyhead') }} <span id="animtt" class="badge">{{ $nav['titetete'] }}</span></a></li>
 			@endif
 			
 			<li><a href="{{ $nav['linkUrl'] }}" style="color:#fff;">{{ $nav['linkText'] }}</a></li>
@@ -131,17 +131,17 @@
 
             <ul class="nav navbar-nav">
 				
-			  <li class="active"><a href="/">Accueil</a></li>
+			  <li class="active"><a href="/">{{ Lang::get('navigation.home') }}</a></li>
 				
               <li class="dropdown">
                 <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Catalogue <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-			      <li><a href="new">Tout neuf</a></li>
+			      <li><a href="new">{{ Lang::get('navigation.newstuff') }}</a></li>
 			      <li class="divider"></li>
-				<li>{{ HTML::link('/catalogue/f', 'Jeux en fran&ccedil;ais') }}</li>
-				<li>{{ HTML::link('/catalogue/e', 'Jeux en anglais') }}</li>
-				<li>{{ HTML::link('/catalogue/dice', 'D&eacute;s et accessoires') }}</li>
-				<li>{{ HTML::link('/catalogue/b', 'Les B&eacute;belles') }}</li>
+				<li>{{ HTML::link('/catalogue/f', Lang::get('navigation.gamesinfrench')) }}</li>
+				<li>{{ HTML::link('/catalogue/e', Lang::get('navigation.gamesinenglish')) }}</li>
+				<li>{{ HTML::link('/catalogue/dice', Lang::get('navigation.diceandacc')) }}</li>
+				<li>{{ HTML::link('/catalogue/b', Lang::get('navigation.dustmagnets')) }}</li>
                   <li class="divider"></li>
                   <li class="dropdown-header">Nav header</li>
                   <li><a href="#">Separated link</a></li>
@@ -152,17 +152,27 @@
 			  <li class="dropdown">
                 <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Liens <span class="caret" style="font-size:20px;"></span></a>
                 <ul class="dropdown-menu" role="menu">
-				  <li><a href="#contact">D&eacute;taillants</a></li>
-				  <li><a href="contact">Nous contacter</a></li>
+				  <li><a href="#contact">{{ Lang::get('navigation.retailers') }}</a></li>
+				  <li><a href="contact">{{ Lang::get('navigation.contactus') }}</a></li>
                 </ul>
               </li>
               
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-               <li><a href="/basket">Panier <span class="badge">$42.00</span></a></li>
-               <li><a href="/preorder">R&eacute;serve <span class="badge">42</span></a></li>
-               <li><a href="/account/login">Connexion</a></li>
+			@if(isset($nav['basket']))
+                 <li><a href="/basket">{{ Lang::get('navigation.basket') }} <span id="animbuy" class="badge">${{ number_format($nav['basket'], 2) }}</span></a></li>
+            @endif
+            
+            @if(isset($nav['reserve']))
+				 <li><a href="/preorder">{{ Lang::get('navigation.preorder') }} <span id="animreserve" class="badge">{{ $nav['reserve'] }}</span></a></li>
+			@endif
+			
+			@if(isset($nav['titetete']))
+				<li><a href="#">{{ Lang::get('navigation.inmyhead') }} <span id="animtt" class="badge">{{ $nav['titetete'] }}</span></a></li>
+			@endif
+			
+			<li><a href="{{ $nav['linkUrl'] }}" style="color:#fff;">{{ $nav['linkText'] }}</a></li>
             </ul>
           </div>
 
@@ -214,26 +224,36 @@
               <li class="dropdown">
                 <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-th"></span></a>
                 <ul class="dropdown-menu" role="menu">
-				  <li><a href="/">Accueil</a></li>
-				  <li><a href="new">Tout neuf</a></li>
-				  <li><a href="#contact">D&eacute;taillants</a></li>
-				  <li><a href="contact">Nous contacter</a></li>
+				  <li><a href="/">{{ Lang::get('navigation.home') }}</a></li>
+				  <li><a href="new">{{ Lang::get('navigation.newstuff') }}</a></li>
+				  <li><a href="#contact">{{ Lang::get('navigation.retailers') }}</a></li>
+				  <li><a href="contact">{{ Lang::get('navigation.contactus') }}</a></li>
 				   <li class="divider"></li>
                   <li class="dropdown-header">Catalogue</li>
 			      
-				<li>{{ HTML::link('/catalogue/f', 'Jeux en fran&ccedil;ais') }}</li>
-				<li>{{ HTML::link('/catalogue/e', 'Jeux en anglais') }}</li>
-				<li>{{ HTML::link('/catalogue/dice', 'D&eacute;s et accessoires') }}</li>
-				<li>{{ HTML::link('/catalogue/b', 'Les B&eacute;belles') }}</li>
+				<li>{{ HTML::link('/catalogue/f', Lang::get('navigation.gamesinfrench')) }}</li>
+				<li>{{ HTML::link('/catalogue/e', Lang::get('navigation.gamesinenglish')) }}</li>
+				<li>{{ HTML::link('/catalogue/dice', Lang::get('navigation.diceandacc')) }}</li>
+				<li>{{ HTML::link('/catalogue/b', Lang::get('navigation.dustmagnets')) }}</li>
                 </ul>
               </li>
               
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-               <li><a href="/basket">Panier <span class="badge">$42.00</span></a></li>
-               <li><a href="/preorder">R&eacute;serve <span class="badge">42</span></a></li>
-               <li><a href="/account/login">Connexion</a></li>
+			@if(isset($nav['basket']))
+                 <li><a href="/basket">{{ Lang::get('navigation.basket') }} <span id="animbuy" class="badge">${{ number_format($nav['basket'], 2) }}</span></a></li>
+            @endif
+            
+            @if(isset($nav['reserve']))
+				 <li><a href="/preorder">{{ Lang::get('navigation.preorder') }} <span id="animreserve" class="badge">{{ $nav['reserve'] }}</span></a></li>
+			@endif
+			
+			@if(isset($nav['titetete']))
+				<li><a href="#">{{ Lang::get('navigation.inmyhead') }} <span id="animtt" class="badge">{{ $nav['titetete'] }}</span></a></li>
+			@endif
+			
+			<li><a href="{{ $nav['linkUrl'] }}" style="color:#fff;">{{ $nav['linkText'] }}</a></li>
             </ul>
           </div>
 

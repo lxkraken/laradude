@@ -45,3 +45,14 @@ a:active {color:#000;text-decoration:none;}  /* selected link */
 .remove-item a:visited {color:#000;text-decoration:none;}  /* visited link */
 .remove-item a:hover {color:#C30A0A;text-decoration:none;}  /* mouse over link */
 .remove-item a:active {color:#000;text-decoration:none;}  /* selected link */
+
+.admin a:link {color:#C30A0A;text-decoration:none;}      /* unvisited link */
+.admin a:visited {color:#C30A0A;text-decoration:none;}  /* visited link */
+.admin a:hover {color:#C30A0A;text-decoration:underline;}  /* mouse over link */
+.admin a:active {color:#000;text-decoration:none;}  /* selected link */
+
+.whitebox {
+	width:100%;
+	background-color:#fff;
+	padding:5px 10px;
+}

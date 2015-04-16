@@ -32,33 +32,33 @@ class PreorderedItemsPresenter  {
 				
 				//$fullDate = 'le '.$dateBits[2].' '.$this->getFrenchMonth($dateBits[1]).', '.$dateBits[0];
 				
-				$season = strtolower($this->getFrenchSeason($dateBits[1])).', '.$dateBits[0];
+				$season = strtolower($this->getSeason($dateBits[1])).', '.$dateBits[0];
 				
 				switch($poItem['available'])
 				{
 					case 0:
-						$this->poItems[$x]['status'] = 'Disponible!';
+						$this->poItems[$x]['status'] = Lang::get('basket.available').'!';
 						break;
 						
 					case 1:
-						$this->poItems[$x]['status'] = 'En transit - p&eacute;vu pour '.$season;
+						$this->poItems[$x]['status'] = Lang::get('catalogue.intransit').' - '.Lang::get('basket.expected').' '.$season;
 						break;
 						
 					case 2:
 						//$this->poItems[$x]['status'] = ($poItem['release_date'] > date('Y-m-d')) ? 'En commande - p&eacute;vu pour '.$season : 'En commande';
-						$this->poItems[$x]['status'] = 'En commande - p&eacute;vu pour '.$season;
+						$this->poItems[$x]['status'] = Lang::get('catalogue.onorder').' - '.Lang::get('basket.expected').' '.$season;
 						break;
 						
 					case 3:
-						$this->poItems[$x]['status'] = 'En r&eacute;impression';
+						$this->poItems[$x]['status'] = Lang::get('catalogue.reprint');
 						break;
 						
 					case 4:
-						$this->poItems[$x]['status'] = 'Disponible '.$season;
+						$this->poItems[$x]['status'] = Lang::get('basket.available').' '.$season;
 						break;
 						
 					case 5:
-						$this->poItems[$x]['status'] = 'Fini pour toute la vie';
+						$this->poItems[$x]['status'] = Lang::get('catalogue.goneforever');
 						break;
 						
 				}		
@@ -138,32 +138,35 @@ class PreorderedItemsPresenter  {
 			
 	}
 
-	private function getFrenchSeason($month) {
+//////////////////////////////////////////////////////////////////
+//private fuctions
+	
+	private function getSeason($month) {
 		
 		switch($month) {
 			
-			case(12):
-			case(1):
-			case(2):
-				$output = 'Hiver';
+			case 12:
+			case 1:
+			case 2:
+				$output = Lang::get('catalogue.winter');
 				break;
 			
-			case(3):
-			case(4):
-			case(5):
-				$output = 'Printemps';
+			case 3:
+			case 4:
+			case 5:
+				$output = Lang::get('catalogue.spring');
 				break;
 			
-			case(6):
-			case(7):
-			case(8):
-				$output = '&Eacute;t&eacute;';
+			case 6:
+			case 7:
+			case 8:
+				$output = Lang::get('catalogue.summer');
 				break;
 				
-			case(9):
-			case(10):
-			case(11):
-				$output = 'Automne';
+			case 9:
+			case 10:
+			case 11:
+				$output = Lang::get('catalogue.autumn');
 				break;
 				
 		}
